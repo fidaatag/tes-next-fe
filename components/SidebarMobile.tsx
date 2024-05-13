@@ -19,9 +19,6 @@ const SidebarMobile = () => {
         <SheetContent side="left" className="!px-0">
           <div className="space-y-4 py-4">
             <div className="px-3 py-9">
-              {/* <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-                Overview
-              </h2> */}
               <div className="space-y-1">
                 <SidebarItemsNav items={LinkItemsNav} setOpen={setOpen} />
               </div>
