@@ -20,9 +20,7 @@ interface DaftarKelasProps {
 const ItemsKelas = ({ kelas }: DaftarKelasProps) => {
 
   const [statusKelas, setStatusKelas] = useState("diulas")
-  const StatusKelasKlik = (value:string) => {
-    setStatusKelas(value)
-  };
+
   const FilterKelas = kelas.filter((item) => {
     if (statusKelas == "semua") return kelas
     else return item.status == statusKelas
@@ -33,10 +31,10 @@ const ItemsKelas = ({ kelas }: DaftarKelasProps) => {
       <div>
         <Tabs defaultValue="diulas" className="">
           <TabsList>
-            <TabsTrigger value="diulas" onClick={() => StatusKelasKlik("diulas")}>Perlu Diulas</TabsTrigger>
-            <TabsTrigger value="public" onClick={() => StatusKelasKlik("public")}>Public</TabsTrigger>
-            <TabsTrigger value="draf" onClick={() => StatusKelasKlik("draf")}>Draf</TabsTrigger>
-            <TabsTrigger value="semua" onClick={() => StatusKelasKlik("semua")}>Semua</TabsTrigger>
+            <TabsTrigger value="diulas" onClick={() => setStatusKelas("diulas")}>Perlu Diulas</TabsTrigger>
+            <TabsTrigger value="public" onClick={() => setStatusKelas("public")}>Public</TabsTrigger>
+            <TabsTrigger value="draf" onClick={() => setStatusKelas("draf")}>Draf</TabsTrigger>
+            <TabsTrigger value="semua" onClick={() => setStatusKelas("semua")}>Semua</TabsTrigger>
           </TabsList>
 
           <TabsContent value={statusKelas} className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-10">
