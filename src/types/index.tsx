@@ -18,15 +18,26 @@ export interface ItemsNav_WithOptionalChildren extends ItemsNav {
 
 
 export interface ListKelas {
+  id:       number;
+  title:    string;
+  status:   string;
+  sections: Section[];
+}
+
+export interface Section {
+  id_section:    number;
+  title_section: string;
+  modules:       Module[];
+}
+
+export interface Module {
+  id_module:    number;
+  title_module: string;
+}
+
+
+export interface SiswaUAS {
   id: number;
-  title: string;
-  status: string;
-}
-
-export interface ListKelas_WithChildren extends ListKelas {
-  kelas: ListKelas_WithChildren[];
-}
-
-export interface ListKelas_WithOptionalChildren extends ListKelas {
-  kelas?: ListKelas_WithOptionalChildren[];
+  nama: string;
+  date: string;
 }
