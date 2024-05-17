@@ -41,3 +41,28 @@ export interface SiswaUAS {
   nama: string;
   date: string;
 }
+
+export interface KategoriKLS {
+  id: number;
+  kategori: string;
+}
+
+export interface TagKLS {
+  id: number;
+  tag: string;
+}
+
+export interface BabKLS {
+  id: number;
+  bab: string;
+}
+
+export interface DipelajariKLS {
+  id: number;
+  pelajari: string;
+}
+
+export interface InstrukturKLS {
+  id: number;
+  guru: string;
+}

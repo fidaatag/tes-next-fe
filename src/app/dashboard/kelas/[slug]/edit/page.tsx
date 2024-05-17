@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import { Button } from "@/src/components/ui/button";
-import FormKelas from "../../../../components/FormKelas";
+import FormKelas from "@/src/components/FormKelas";
 
-const TambahPage = () => {
+const PageEdit = () => {
 
   const [typeButtonForm, setTypeButtonForm] = useState("")
 
@@ -32,4 +32,4 @@ const TambahPage = () => {
   );
 };
 
-export default TambahPage;
+export default PageEdit;
