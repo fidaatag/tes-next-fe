@@ -1,4 +1,4 @@
-import { ListKelas, SiswaUAS } from "@/src/types";
+import { InstrukturKLS, KategoriKLS, ListKelas, SiswaUAS } from "@/src/types";
 
 export const DataListKelas: ListKelas[] = [
   {
@@ -106,3 +106,58 @@ export const DataNamaSiswaUAS: SiswaUAS[] = [
   },
   
 ]
+
+export const DataKategoriKelas: KategoriKLS[] = [
+  {
+    id: 1,
+    kategori: "Sejarah"
+  },
+  {
+    id: 2,
+    kategori: "Sosial"
+  },
+  {
+    id: 3,
+    kategori: "Fisika"
+  },
+  {
+    id: 4,
+    kategori: "Fiqih"
+  },
+  {
+    id: 5,
+    kategori: "Sesajen"
+  },
+  {
+    id: 6,
+    kategori: "Fish"
+  },
+  {
+    id: 7,
+    kategori: "Sosis"
+  },
+];
+
+export const DataInstrukturKelas: InstrukturKLS[] = [
+  {
+    id: 1,
+    guru: "Devi Permatasari, S.E"
+  },
+  {
+    id: 2,
+    guru: "Lala Atasari, S.E"
+  },
+  {
+    id: 3,
+    guru: "Santi Perasari, S.E"
+  },
+  {
+    id: 4,
+    guru: "Yanya Matasari, S.E"
+  },
+  {
+    id: 5,
+    guru: "Belro Tasari, S.E"
+  },
+]
+
