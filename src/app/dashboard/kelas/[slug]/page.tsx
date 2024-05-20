@@ -10,6 +10,7 @@ import IsiMateriKelas from "./IsiMateriKelas";
 import NamaKelas from "./NamaKelas";
 import NamaSiswaUAS from "./NamaSiswaUAS";
 import { DataListKelas, DataNamaSiswaUAS } from "@/src/constants/example";
+import Link from "next/link";
 
 type PageDetailKelasProps = {
   params: { slug: string };
@@ -24,9 +25,11 @@ const PageDetailKelas = ({ params }: PageDetailKelasProps) => {
         <div className="flex justify-between items-center mb-8">
           <NamaKelas isikelas={DataListKelas} params={id} />
           <div className="w-1/2 flex justify-end">
+            <Link href={`/dashboard/kelas/${id}/edit`}>
             <Button className="bg-blue-400" variant="outline">
               Edit Kelas
             </Button>
+            </Link>
           </div>
         </div>
 
