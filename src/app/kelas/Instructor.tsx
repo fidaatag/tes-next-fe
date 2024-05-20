@@ -10,37 +10,37 @@ const instructors = [
     name: "Prof. Dr. Khong Guan, S.E., M.E.",
     title: "Director, Greater Good",
     center: "Science Center",
-    image: "/instructor.png", // Replace with the actual image path
+    image: "/images/instructor.png", // Replace with the actual image path
   },
   {
     name: "Prof. Dr. Khong Guan, S.E., M.E.",
     title: "Director, Greater Good",
     center: "Science Center",
-    image: "/instructor.png",
+    image: "/images/instructor.png",
   },
   {
     name: "Prof. Dr. Khong Guan, S.E., M.E.",
     title: "Director, Greater Good",
     center: "Science Center",
-    image: "/instructor.png",
+    image: "/images/instructor.png",
   },
   {
     name: "Prof. Dr. Khong Guan, S.E., M.E.",
     title: "Director, Greater Good",
     center: "Science Center",
-    image: "/instructor.png",
+    image: "/images/instructor.png",
   },
   {
     name: "Prof. Dr. Khong Guan, S.E., M.E.",
     title: "Director, Greater Good",
     center: "Science Center",
-    image: "/instructor.png",
+    image: "/images/instructor.png",
   },
   {
     name: "Prof. Dr. Khong Guan, S.E., M.E.",
     title: "Director, Greater Good",
     center: "Science Center",
-    image: "/instructor.png",
+    image: "/images/instructor.png",
   },
 ];
 

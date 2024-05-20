@@ -10,7 +10,7 @@ function Partner() {
       <div className="flex flex-wrap justify-center items-center gap-2 px-2">
         <div className="w-1/3 sm:w-1/4 md:w-1/6">
           <Image
-            src="/partner/kerjasama1.png"
+            src="/images/partner/kerjasama1.png"
             alt="KDU University"
             width={160}
             height={90}
@@ -19,7 +19,7 @@ function Partner() {
         </div>
         <div className="w-1/3 sm:w-1/4 md:w-1/6">
           <Image
-            src="/partner/kerjasama2.png"
+            src="/images/partner/kerjasama2.png"
             alt="European University of Applied Sciences"
             width={160}
             height={90}
@@ -28,7 +28,7 @@ function Partner() {
         </div>
         <div className="w-1/3 sm:w-1/5 md:w-1/6">
           <Image
-            src="/partner/kerjasama3.png"
+            src="/images/partner/kerjasama3.png"
             alt="University of King Saud"
             width={160}
             height={90}
@@ -37,7 +37,7 @@ function Partner() {
         </div>
         <div className="w-1/3 sm:w-1/4 md:w-1/6">
           <Image
-            src="/partner/kerjasama4.png"
+            src="/images/partner/kerjasama4.png"
             alt="Other University"
             width={160}
             height={90}
@@ -46,7 +46,7 @@ function Partner() {
         </div>
         <div className="w-1/3 sm:w-1/4 md:w-1/6">
           <Image
-            src="/partner/kerjasama5.png"
+            src="/images/partner/kerjasama5.png"
             alt="Another University"
             width={160}
             height={90}
@@ -55,7 +55,7 @@ function Partner() {
         </div>
         <div className="w-1/3 sm:w-1/4 md:w-1/6">
           <Image
-            src="/partner/kerjasama6.png"
+            src="/images/partner/kerjasama6.png"
             alt="Last University"
             width={160}
             height={90}
