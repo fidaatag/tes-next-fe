@@ -24,42 +24,45 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import TambahBab from "./TambahBab";
 import { Button } from "@/src/components/ui/button";
-import { Edit, Trash } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group"
 
 
 const formSchema = z.object({
   nama_kelas: z.string(),
   tentang_kelas: z.string(),
-  // pelajari_kelas: z.array(z.object({id: z.number(), pelajari: z.string()})),
-  // instruktur:  z.array(z.object({id: z.number(), guru: z.string()})),
+  pelajari_kelas: z.array(z.string()).refine((value) => value.some((item) => item)),
+  instruktur:  z.array(z.string()).refine((value) => value.some((item) => item)),
   lama_kelas: z.string(),
   upaya: z.string(),
   harga_kelas: z.string(),
   bahasa_kelas: z.string(),
   transkrip_video: z.string(),
-  // kategori: z.number(),
-  // tags: z.array(z.string()).refine((value) => value.some((item) => item)),
+  kategori: z.number(),
+  tags: z.array(z.string()).refine((value) => value.some((item) => item)),
 });
 
 
 
-const FormKelas = ({typeBtn} : {typeBtn: string}) => {
+const FormKelas = ({typeBtn} : {typeBtn: string}) : JSX.Element => {
 
+  // console.log(typeBtn);
+  // console.log(typeBtn);
+  
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       nama_kelas: "",
       tentang_kelas: "",
-      // pelajari_kelas: [{id: undefined, pelajari: ""}],
-      // instruktur: [{id: undefined, guru: ""}],
+      pelajari_kelas: [""],
+      instruktur: [""],
       lama_kelas: "",
       upaya: "",
       harga_kelas: "",
       bahasa_kelas: "",
       transkrip_video: "",
-      // kategori: 1,
-      //ntags: [""],
+      kategori: 1,
+      tags: [""],
     },
   });
 
@@ -82,38 +85,42 @@ const FormKelas = ({typeBtn} : {typeBtn: string}) => {
   };
 
   const hapusPelajari = (hapus: any) => {
-    const sisaPelajari = pelajari.filter((tag: any) => tag.id !== hapus.id);
+    const sisaPelajari = pelajari.filter((tag: any) => tag !== hapus);
     setPelajari(sisaPelajari);
   };
 
-    // * ------- sisi kiri -------------
-    const [cariKategori, setCariKategori] = useState("");
-    const [hasilCariKategori, setHasilCariKategori] = useState<KategoriKLS[]>([]);
-    useEffect(() => {
-      const hasilPencarian = DataKategoriKelas.filter((item) =>
-        item.kategori.toLowerCase().includes(cariKategori.toLowerCase())
-      );
-  
-      setHasilCariKategori(hasilPencarian);
-    }, [cariKategori]);
-  
-    const [tags, setTags] = useState<TagKLS[]>([]);
-    const tambahTag = (e: any) => {
-      if (e.key === "Enter" && e.target.value.length > 0) {
-        const newTag: TagKLS = {
-          id: tags.length + 1,
-          tag: e.target.value,
-        };
-  
-        setTags((prevTags) => [...prevTags, newTag]);
-        e.target.value = "";
-      }
-    };
-  
-    const hapusTag = (hapus: any) => {
-      const sisaTag = tags.filter((tag: any) => tag !== hapus);
-      setTags(sisaTag);
-    };
+
+
+
+  // * ------- sisi kiri -------------
+  const [cariKategori, setCariKategori] = useState("");
+  const [hasilCariKategori, setHasilCariKategori] = useState<KategoriKLS[]>([]);
+  useEffect(() => {
+    const hasilPencarian = DataKategoriKelas.filter((item) =>
+      item.kategori.toLowerCase().includes(cariKategori.toLowerCase())
+    );
+
+    setHasilCariKategori(hasilPencarian);
+  }, [cariKategori]);
+
+  const [tags, setTags] = useState<TagKLS[]>([]);
+  const tambahTag = (e: any) => {
+    if (e.key === "Enter" && e.target.value.length > 0) {
+      const newTag: TagKLS = {
+        id: tags.length + 1,
+        tag: e.target.value,
+      };
+
+      setTags((prevTags) => [...prevTags, newTag]);
+      e.target.value = "";
+    }
+  };
+
+  const hapusTag = (hapus: any) => {
+    const sisaTag = tags.filter((tag: any) => tag !== hapus);
+    setTags(sisaTag);
+  };
+
 
 
   return (
@@ -164,54 +171,47 @@ const FormKelas = ({typeBtn} : {typeBtn: string}) => {
 
 
               {/* area yang dipelajari */}
-              <div className="w-full">
-              <h3 className="mt-10 font-extrabold mb-5">Apa yang Dipelajari</h3>
-
-              <div className="mb-1">
-                <div className="flex gap-2 items-center">
-                  <p>◾</p>
-                  <p>Menjadi insan manusia yang berakhlak mulia</p>
-                  <div className="flex gap-2 ml-10">
-                    <Edit className="w-3 h-3 opacity-50  group-hover:opacity-80" />
-                    <Trash className="w-3 h-3 opacity-50  group-hover:opacity-80" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="mb-1">
-                <div className="flex gap-2 items-center">
-                  <p>◾</p>
-                  <p>Menjadi insan manusia yang berakhlak mulia</p>
-                  <div className="flex gap-2 ml-10">
-                    <Edit className="w-3 h-3 opacity-50  group-hover:opacity-80" />
-                    <Trash className="w-3 h-3 opacity-50  group-hover:opacity-80" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <div className="flex gap-2 items-center">
-                  <p>◾</p>
-                  <p>Menjadi insan manusia yang berakhlak mulia</p>
-                  <div className="flex gap-2 ml-10">
-                    <Edit className="w-3 h-3 opacity-50  group-hover:opacity-80" />
-                    <Trash className="w-3 h-3 opacity-50  group-hover:opacity-80" />
-                  </div>
-                </div>
-              </div>
-              
-              <Input 
-              className="mb-2"
-              placeholder="Menjadi Insan manusia yang berakhlak mulia" 
-              onChange={(e) => setInputPelajari(e.target.value)}
-              disabled/>
-              <Button variant="secondary" onClick={tambahPelajari} className="w-full">+ Tambahkan</Button>
-              </div>
+              <h3 className="mt-10 font-extrabold">Apa yang Dipelajari</h3>
+              {pelajari.map((pel) => (            
+                <FormField
+                  key={pel.id}
+                  control={form.control}
+                  name="pelajari_kelas"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center space-x-1 space-y-0">
+                      <p className="text-sm">⚫️</p>
+                      <FormLabel>{pel.pelajari}</FormLabel>          
+                      <FormControl>
+                      <div className="relative">   
+                        <Checkbox
+                          onClick={() => hapusPelajari(pel)}
+                          className="h-5 w-5 absolute -left-1 top-1 border-transparent"
+                          checked={field.value?.includes(
+                            pel.id.toString()
+                          )}
+                          onCheckedChange={(checked) => {
+                            return checked ?
+                              field.onChange(field.value?.filter((value) => value !== pel.id.toString()))
+                              : field.onChange([...field.value, pel.id.toString()])
+                          }}
+                        />
+                        <div className="flex gap-2">
+                          {/* <button disabled className="hover:underline">✏️</button> */}
+                          <button className="hover:underline">🗑️</button>
+                        </div>
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              ))}
+              <Input placeholder="Menjadi Insan manusia yang berakhlak mulia" onChange={(e) => setInputPelajari(e.target.value)}/>
+              <Button variant="secondary" onClick={tambahPelajari}>+ Tambahkan</Button>
 
 
               {/* area tambah instruktur */}
               <h3 className="font-extrabold mt-10">Anggota Instruktur/Dosen Pengajar</h3>
-              <Input placeholder="Cari Instruktur" disabled/>
+              <Input placeholder="Cari Instruktur"/>
               <div>
                 <div className="flex justify-between border-2 p-4">
                   <p>Devi Permatasari, S.E., M.Si</p>
@@ -342,8 +342,8 @@ const FormKelas = ({typeBtn} : {typeBtn: string}) => {
                               <SelectValue placeholder="Indonesia" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="indonesia">Indonesia</SelectItem>
-                              <SelectItem value="english">English</SelectItem>
+                              <SelectItem value="light">Indonesia</SelectItem>
+                              <SelectItem value="dark">English</SelectItem>
                             </SelectContent>
                           </Select>
                         </FormControl>
@@ -370,10 +370,34 @@ const FormKelas = ({typeBtn} : {typeBtn: string}) => {
                               <SelectValue placeholder="Indonesia" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="indonesia">Indonesia</SelectItem>
-                              <SelectItem value="english">English</SelectItem>
+                              <SelectItem value="light">Indonesia</SelectItem>
+                              <SelectItem value="dark">English</SelectItem>
                             </SelectContent>
                           </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+
+              {/* field lama_kelas */}
+              <div>
+                <div className="bg-gray-300">
+                  <h2 className="py-2 pl-2 ">Durasi Kelas</h2>
+                </div>
+
+                <div className="p-2">
+                  <FormField
+                    control={form.control}
+                    name="lama_kelas"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Lama Kelas</FormLabel>
+                        <FormControl>
+                          <Input placeholder="8 minggu" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -395,30 +419,36 @@ const FormKelas = ({typeBtn} : {typeBtn: string}) => {
                     placeholder="Cari Kategori"
                     value={cariKategori}
                     onChange={(e) => setCariKategori(e.target.value)}
-                    disabled
                   />
-                  <div className="mt-4 ml-4 h-20 overflow-y-scroll space-y-2">
-                    <div className="flex gap-2 items-center">
-                      <Checkbox/>
-                      <p className="text-sm">Sejarah</p>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                      <Checkbox/>
-                      <p className="text-sm">Ekonomi</p>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                      <Checkbox/>
-                      <p className="text-sm">Sains</p>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                      <Checkbox/>
-                      <p className="text-sm">Agama</p>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                      <Checkbox/>
-                      <p className="text-sm">Sastra</p>
-                    </div>
-                    
+                  <div className="mt-4 ml-4 h-20 overflow-y-scroll">
+                    <FormField 
+                      control={form.control}
+                      name="kategori"
+                      render={({field})=> (
+                        <FormItem>
+
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              defaultValue={field.value.toString()}
+                              className="flex flex-col space-y-1"
+                            >
+                              {hasilCariKategori.map((item) => (
+                                <FormItem className="flex items-center space-x-3 space-y-0" key={item.id}>
+                                  <FormControl>
+                                    <RadioGroupItem value={item.id.toString()} />
+                                  </FormControl>
+                                  <FormLabel>
+                                    {item.kategori}
+                                  </FormLabel>
+                                </FormItem>
+                              ))}
+                            </RadioGroup>
+                          </FormControl>
+
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 </div>
               </div>
@@ -433,6 +463,66 @@ const FormKelas = ({typeBtn} : {typeBtn: string}) => {
                 <div className="p-2">
                   {/* tag container */}
                   <div className="flex flex-wrap min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                    
+                    <FormField 
+                      control={form.control}
+                      name="tags"
+                      render={() => (
+                        <FormItem>
+                          {tags.map((item) => (
+                            <FormField
+                              key={item.id}
+                              control={form.control}
+                              name="tags"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={item.id}
+                                    className="flex gap-1 items-start mr-2 bg-gray-200 rounded-md px-2"
+                                  >
+                                    <FormControl>
+                                      <div className="relative">
+                                        <Checkbox
+                                          onClick={() => hapusTag(item)}
+                                          className="h-5 w-5 absolute -left-1 top-1 border-transparent"
+                                          checked={field.value?.includes(
+                                            item.id.toString()
+                                          )}
+                                          onCheckedChange={(checked) => {
+                                            return checked
+                                              ? field.onChange(
+                                                  field.value?.filter(
+                                                    (value) =>
+                                                      value !== item.id.toString()
+                                                  )
+                                                )
+                                              : field.onChange([
+                                                  ...field.value,
+                                                  item.id.toString(),
+                                                ]); // kalo ga di klik data masuk
+                                          }}
+                                        />
+                                        <p className="mr-2">x</p>
+                                      </div>
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {item.tag}
+                                    </FormLabel>
+                                  </FormItem>
+                                );
+                              }}
+                            />
+                          ))}
+                        </FormItem>
+                      )}
+                    />
+                    
+                    
+
+                    <input
+                      onKeyDown={tambahTag}
+                      className="flex-1 border-none outline-none h-5"
+                    />
                   </div>
                 </div>
               </div>
