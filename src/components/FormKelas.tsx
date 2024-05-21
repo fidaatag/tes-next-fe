@@ -17,7 +17,7 @@ import {
 } from "@/src/components/ui/select";
 import { Textarea } from "@/src/components/ui/textarea";
 import { DataKategoriKelas } from "@/src/constants/example";
-import { DipelajariKLS, KategoriKLS, TagKLS } from "@/src/types";
+import { DipelajariKLS, KategoriKLS, ListKelas, TagKLS } from "@/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -28,43 +28,40 @@ import { Edit, Trash } from "lucide-react";
 
 
 const formSchema = z.object({
-  nama_kelas: z.string(),
+  nama_kelas: z.string().min(5, {message: "Isi Dulu Nama Kelas, Mininal 5 huruf"}),
   tentang_kelas: z.string(),
-  // pelajari_kelas: z.array(z.object({id: z.number(), pelajari: z.string()})),
-  // instruktur:  z.array(z.object({id: z.number(), guru: z.string()})),
-  lama_kelas: z.string(),
-  upaya: z.string(),
-  harga_kelas: z.string(),
+  lama_kelas: z.coerce.number(),
+  upaya: z.coerce.number(),
+  harga_kelas: z.coerce.number(),
   bahasa_kelas: z.string(),
   transkrip_video: z.string(),
-  // kategori: z.number(),
-  // tags: z.array(z.string()).refine((value) => value.some((item) => item)),
 });
 
 
+type FormKelasProps = {
+  typeBtn :  string;
+  AllValue : (data: z.infer<typeof formSchema>) => void;
+  oldData? : ListKelas
+}
 
-const FormKelas = ({typeBtn} : {typeBtn: string}) => {
 
+const FormKelas = ({typeBtn, AllValue, oldData} : FormKelasProps) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      nama_kelas: "",
-      tentang_kelas: "",
-      // pelajari_kelas: [{id: undefined, pelajari: ""}],
-      // instruktur: [{id: undefined, guru: ""}],
-      lama_kelas: "",
-      upaya: "",
-      harga_kelas: "",
-      bahasa_kelas: "",
-      transkrip_video: "",
-      // kategori: 1,
-      //ntags: [""],
-    },
+    // defaultValues: {
+    //   nama_kelas: oldData?.name,
+    //   tentang_kelas: oldData?.about,
+    //   lama_kelas: oldData?.duration,
+    //   upaya: oldData?.effort_taken,
+    //   harga_kelas: oldData?.price,
+    //   bahasa_kelas: oldData?.language,
+    //   transkrip_video: oldData?.language,
+    // },
   });
 
   function KirimForm (values: z.infer<typeof formSchema>) {
-    alert(JSON.stringify(values));
+    AllValue(values); // kirim semua value form ke induknya (page.tsx)
   };
 
 
@@ -136,7 +133,7 @@ const FormKelas = ({typeBtn} : {typeBtn: string}) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input placeholder="Nama Kelas" {...field} />
+                      <Input placeholder="Nama Kelas" {...field} defaultValue={oldData ? oldData.name : "" || ""}/>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -155,6 +152,7 @@ const FormKelas = ({typeBtn} : {typeBtn: string}) => {
                         placeholder="Tulis Tentang Kelas Ini"
                         {...field}
                         className="h-48"
+                        defaultValue={oldData ? oldData.about : ""}
                       />
                     </FormControl>
                     <FormMessage />
@@ -268,7 +266,7 @@ const FormKelas = ({typeBtn} : {typeBtn: string}) => {
                       <FormItem>
                         <FormLabel>Lama Kelas</FormLabel>
                         <FormControl>
-                          <Input placeholder="8 minggu" {...field} />
+                          <Input type="number" placeholder="8 minggu" {...field} defaultValue={oldData ? oldData.duration : 0}/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -285,7 +283,7 @@ const FormKelas = ({typeBtn} : {typeBtn: string}) => {
                       <FormItem>
                         <FormLabel>Upaya</FormLabel>
                         <FormControl>
-                          <Input placeholder="2-4 minggu" {...field} />
+                          <Input type="number" placeholder="2-4 minggu" {...field}  defaultValue={oldData ? oldData.effort_taken : 0}/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -309,7 +307,7 @@ const FormKelas = ({typeBtn} : {typeBtn: string}) => {
                       <FormItem>
                         <FormLabel>Harga</FormLabel>
                         <FormControl>
-                          <Input placeholder="200.000" {...field} />
+                          <Input type="number" placeholder="200.000" {...field} defaultValue={oldData ? oldData.price : 0} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -336,7 +334,7 @@ const FormKelas = ({typeBtn} : {typeBtn: string}) => {
                         <FormControl>
                           <Select
                             onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            defaultValue={oldData ? oldData.language : field.value}
                           >
                             <SelectTrigger className="w-full">
                               <SelectValue placeholder="Indonesia" />
@@ -364,7 +362,7 @@ const FormKelas = ({typeBtn} : {typeBtn: string}) => {
                         <FormControl>
                           <Select
                             onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            defaultValue={oldData ? oldData.language : field.value}
                           >
                             <SelectTrigger className="w-full">
                               <SelectValue placeholder="Indonesia" />

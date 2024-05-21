@@ -18,10 +18,24 @@ export interface ItemsNav_WithOptionalChildren extends ItemsNav {
 
 
 export interface ListKelas {
-  id:       number;
-  title:    string;
-  status:   string;
-  sections: Section[];
+  id: number
+  name: string
+  description: string
+  about: string
+  duration: number
+  effort_taken: number
+  status: string
+  price: number
+  language: string
+  image_cover: string
+  created_at: string
+  updated_at: string
+  created_by: number
+  updated_by: number
+  course_category_id: number
+  deleted_at: Date
+  is_superior: number
+  sections: Section[]
 }
 
 export interface Section {
