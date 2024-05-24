@@ -4,18 +4,32 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover"
-import { BabKLS } from "@/src/types"
+import { Section } from "@/src/types"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-const TambahBab = () => {
-  const [babs, setBabs] = useState<BabKLS[]>([])
+type TambahBabProps = {
+  dataBab: any;
+  sections?: Section[];
+}
+
+const TambahBab = ({dataBab, sections}: TambahBabProps) => {
+  const [babs, setBabs] = useState<Section[]>([])
   const [inputBab, setInputBab] = useState("")
 
+  // saat pertama : mendapatkan data yg tersedia || saat sudh di isi : mengirim data terbaru ke page.tsx
+  dataBab(babs)
+
+  useEffect(() => {
+    if (sections) {
+      setBabs(sections);
+    }
+  }, [sections])
+
+
   const tambahBab = () => {
-    const newBab: BabKLS = {
-      id: babs.length + 1,
-      bab: inputBab,
+    const newBab: Section = {
+      section_title: inputBab,
     };
 
     setBabs((prevBabs) => [...prevBabs, newBab]);
@@ -52,11 +66,11 @@ const TambahBab = () => {
 
 
 
-          {babs.map((bab: any) => (
+          {babs?.map((bab: any) => (
             <Accordion type="single" collapsible={true} className="w-full" key={bab.id}>
               <AccordionItem value="item-1">
                 <div className="flex justify-between">
-                  <AccordionTrigger>{bab.bab}</AccordionTrigger>
+                  <AccordionTrigger>{bab.section_title}</AccordionTrigger>
                   <Popover>
                       <PopoverTrigger className="text-3xl font-extrabold">⋮</PopoverTrigger>
                       <PopoverContent className="flex flex-col gap-3">
