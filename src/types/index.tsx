@@ -35,13 +35,18 @@ export interface ListKelas {
   course_category_id: number
   deleted_at: Date
   is_superior: number
-  sections: Section[]
+  sections?: Section[]
 }
 
 export interface Section {
-  id_section:    number;
-  title_section: string;
-  modules:       Module[];
+  id?: number; 
+  course_id?:    number;
+  section_title: string;
+  created_by?: number;
+  updated_by?: number;
+  created_at?: string;
+  updated_at?: string;
+  modules?:       Module[];
 }
 
 export interface Module {
