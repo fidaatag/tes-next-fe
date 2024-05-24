@@ -1,3 +1,5 @@
+"use client"
+
 import { Checkbox } from "@/src/components/ui/checkbox";
 import {
   Form,
@@ -28,42 +30,43 @@ import { Edit, Trash } from "lucide-react";
 
 
 const formSchema = z.object({
-  nama_kelas: z.string().min(5, {message: "Isi Dulu Nama Kelas, Mininal 5 huruf"}),
-  tentang_kelas: z.string(),
-  lama_kelas: z.coerce.number(),
-  upaya: z.coerce.number(),
-  harga_kelas: z.coerce.number(),
-  bahasa_kelas: z.string(),
+  name: z.string().min(5, {message: "Isi Dulu Nama Kelas, Mininal 5 huruf"}),
+  description: z.string(),
+  duration: z.coerce.number(),
+  effort_taken: z.coerce.number(),
+  price: z.coerce.number(),
+  language: z.string(),
   transkrip_video: z.string(),
 });
 
 
 type FormKelasProps = {
   typeBtn :  string;
-  AllValue : (data: z.infer<typeof formSchema>) => void;
-  oldData? : ListKelas
+  AllValue? : (data: z.infer<typeof formSchema>) => void;
+  oldData? : ListKelas;
+  respon?: any;
+  dataBab?: any;
 }
 
 
-const FormKelas = ({typeBtn, AllValue, oldData} : FormKelasProps) => {
+const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab} : FormKelasProps) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     // defaultValues: {
-    //   nama_kelas: oldData?.name,
-    //   tentang_kelas: oldData?.about,
-    //   lama_kelas: oldData?.duration,
-    //   upaya: oldData?.effort_taken,
-    //   harga_kelas: oldData?.price,
-    //   bahasa_kelas: oldData?.language,
+    //   name: oldData?.name,
+    //   description: oldData?.about,
+    //   duration: oldData?.duration,
+    //   effort_taken: oldData?.effort_taken,
+    //   price: oldData?.price,
+    //   language: oldData?.language,
     //   transkrip_video: oldData?.language,
     // },
   });
 
-  function KirimForm (values: z.infer<typeof formSchema>) {
-    AllValue(values); // kirim semua value form ke induknya (page.tsx)
-  };
-
+  async function KirimForm(values: z.infer<typeof formSchema>) {
+    respon(values) // kirim semua value form ke induknya (page.tsx)
+  }
 
   // * ------- sisi kanan -------------
   const [pelajari, setPelajari] = useState<DipelajariKLS[]>([])
@@ -120,16 +123,16 @@ const FormKelas = ({typeBtn, AllValue, oldData} : FormKelasProps) => {
           <form
             onSubmit={form.handleSubmit(KirimForm)}
             className="grid grid-cols-4 justify-between gap-10"
-            id={ typeBtn === "draf" ? "draf" : typeBtn === "publish" ? "publish" : "hapus" }
+            id={ typeBtn === "drafted" ? "drafted" : typeBtn === "published" ? "published" : "hapus" }
           >
             {/* // ! --- sisi kanan ----  */}
             <div className="col-span-3 flex flex-col gap-4">
 
 
-              {/* field nama_kelas */}
+              {/* field name */}
               <FormField
                 control={form.control}
-                name="nama_kelas"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -141,10 +144,10 @@ const FormKelas = ({typeBtn, AllValue, oldData} : FormKelasProps) => {
               />
 
 
-              {/* field tentang_kelas */}
+              {/* field description */}
               <FormField
                 control={form.control}
-                name="tentang_kelas"
+                name="description"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -242,7 +245,7 @@ const FormKelas = ({typeBtn, AllValue, oldData} : FormKelasProps) => {
 
               
               {/* area tambah kelas */}
-              <TambahBab/>
+              <TambahBab dataBab={(e: any) => dataBab(e)} sections={oldData?.sections}/>
 
             </div>
 
@@ -261,7 +264,7 @@ const FormKelas = ({typeBtn, AllValue, oldData} : FormKelasProps) => {
                 <div className="p-2">
                   <FormField
                     control={form.control}
-                    name="lama_kelas"
+                    name="duration"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Lama Kelas</FormLabel>
@@ -275,10 +278,9 @@ const FormKelas = ({typeBtn, AllValue, oldData} : FormKelasProps) => {
                 </div>
 
                 <div className="p-2">
-                  {/* field upaya */}
                   <FormField
                     control={form.control}
-                    name="upaya"
+                    name="effort_taken"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Upaya</FormLabel>
@@ -302,7 +304,7 @@ const FormKelas = ({typeBtn, AllValue, oldData} : FormKelasProps) => {
                 <div className="p-2">
                   <FormField
                     control={form.control}
-                    name="harga_kelas"
+                    name="price"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Harga</FormLabel>
@@ -327,7 +329,7 @@ const FormKelas = ({typeBtn, AllValue, oldData} : FormKelasProps) => {
                   
                   <FormField
                     control={form.control}
-                    name="bahasa_kelas"
+                    name="language"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Materi</FormLabel>
@@ -388,7 +390,6 @@ const FormKelas = ({typeBtn, AllValue, oldData} : FormKelasProps) => {
                 </div>
 
                 <div className="p-2 mt-2">
-                  {/* field lama_kelas */}
                   <Input
                     placeholder="Cari Kategori"
                     value={cariKategori}
