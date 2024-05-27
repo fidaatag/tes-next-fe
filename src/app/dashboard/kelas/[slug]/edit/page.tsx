@@ -32,8 +32,8 @@ const PageEdit = ({ params }: PageEditKelasProps) => {
   const handleBtnSubmit = async (e: string) => {
     setTypeButtonForm(e);
 
-    if (typeButtonForm === "drafted") {
-      const respon = await APIEditKelas(responForm, typeButtonForm, id);
+    if (e === "drafted") {
+      const respon = await APIEditKelas(responForm, e, id);
 
       if (respon?.course?.id) {
         const course_id = respon.course.id;
@@ -47,13 +47,13 @@ const PageEdit = ({ params }: PageEditKelasProps) => {
       }
     }
 
-    if (typeButtonForm === "published") {
-      const respon = await APIEditKelas(responForm, typeButtonForm, id);
+    if (e === "published") {
+      const respon = await APIEditKelas(responForm, e, id);
       alert(JSON.stringify(respon));
     }
 
-    if (typeButtonForm === "hapus") {
-      const respon = await APIEditKelas(responForm, typeButtonForm, id);
+    if (e === "hapus") {
+      const respon = await APIEditKelas(responForm, e, id);
       alert(JSON.stringify(respon));
     }
   };

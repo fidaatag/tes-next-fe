@@ -22,7 +22,7 @@ import { DataKategoriKelas } from "@/src/constants/example";
 import { DipelajariKLS, KategoriKLS, ListKelas, TagKLS } from "@/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import TambahBab from "./TambahBab";
 import { Button } from "@/src/components/ui/button";
@@ -44,7 +44,7 @@ type FormKelasProps = {
   typeBtn :  string;
   AllValue? : (data: z.infer<typeof formSchema>) => void;
   oldData? : ListKelas;
-  respon?: any;
+  respon?: (data: any) => void;
   dataBab?: any;
 }
 
@@ -64,9 +64,16 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab} : FormKelasProp
     // },
   });
 
-  async function KirimForm(values: z.infer<typeof formSchema>) {
-    respon(values) // kirim semua value form ke induknya (page.tsx)
-  }
+  const { control } = form
+  const valueForm = useWatch({control})
+  // data pada valueForm langsung di lempar di page.tsx saat pengisian data 
+
+  useEffect(() => {
+    if (respon) {
+      respon(valueForm);
+    }
+  }, [valueForm, respon]);
+
 
   // * ------- sisi kanan -------------
   const [pelajari, setPelajari] = useState<DipelajariKLS[]>([])
@@ -121,7 +128,6 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab} : FormKelasProp
       <div>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(KirimForm)}
             className="grid grid-cols-4 justify-between gap-10"
             id={ typeBtn === "drafted" ? "drafted" : typeBtn === "published" ? "published" : "hapus" }
           >
@@ -245,7 +251,7 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab} : FormKelasProp
 
               
               {/* area tambah kelas */}
-              <TambahBab dataBab={(e: any) => dataBab(e)} sections={oldData?.sections}/>
+              <TambahBab dataBab={(e: any) => dataBab(e)} sections={oldData?.sections} course_id={oldData?.id}/>
 
             </div>
 
