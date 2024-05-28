@@ -50,7 +50,7 @@ function AllClasses() {
       instructor: "Prof. Dr. Khong Guan, S.E., M.E.",
       type: "Kelas Satuan",
       duration: "4 Minggu",
-      image: "/class/class1.png",
+      image: "/images/class/class1.png",
     },
     {
       title: "Manajemen Keuangan Pribadi",
@@ -60,7 +60,7 @@ function AllClasses() {
       instructor: "Prof. Dr. Khong Guan, S.E., M.E.",
       type: "Kelas Satuan",
       duration: "4 Minggu",
-      image: "/class/class2.png",
+      image: "/images/class/class2.png",
     },
     {
       title: "Manajemen Keuangan Pribadi",
@@ -70,7 +70,7 @@ function AllClasses() {
       instructor: "Prof. Dr. Khong Guan, S.E., M.E.",
       type: "Kelas Satuan",
       duration: "4 Minggu",
-      image: "/class/class3.png",
+      image: "/images/class/class3.png",
     },
     {
       title: "Manajemen Keuangan Pribadi",
@@ -80,7 +80,7 @@ function AllClasses() {
       instructor: "Prof. Dr. Khong Guan, S.E., M.E.",
       type: "Kelas Satuan",
       duration: "4 Minggu",
-      image: "/class/class4.png",
+      image: "/images/class/class4.png",
     },
     {
       title: "Manajemen Keuangan Pribadi",
@@ -90,7 +90,7 @@ function AllClasses() {
       instructor: "Prof. Dr. Khong Guan, S.E., M.E.",
       type: "Kelas Satuan",
       duration: "4 Minggu",
-      image: "/class/class5.png",
+      image: "/images/class/class5.png",
     },
     {
       title: "Manajemen Keuangan Pribadi",
@@ -100,7 +100,7 @@ function AllClasses() {
       instructor: "Prof. Dr. Khong Guan, S.E., M.E.",
       type: "Kelas Satuan",
       duration: "4 Minggu",
-      image: "/class/class6.png",
+      image: "/images/class/class6.png",
     },
   ];
   return (

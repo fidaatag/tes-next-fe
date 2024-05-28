@@ -22,11 +22,12 @@ import {
 } from "@/src/components/ui/form";
 import { BiSolidShow, BiSolidHide } from "react-icons/bi";
 import Image from "next/image";
+import axios from "axios";
 
-// Definisikan skema validasi menggunakan zod
+// Define validation schema using zod
 const registerSchema = z
   .object({
-    fullName: z.string().min(1, "Nama lengkap diperlukan"),
+    name: z.string().min(1, "Nama lengkap diperlukan"),
     email: z.string().email("Email tidak valid"),
     password: z.string().min(6, "Password minimal 6 karakter"),
     confirmPassword: z
@@ -56,9 +57,40 @@ export default function RegisterCard() {
     formState: { errors },
   } = methods;
 
-  const onSubmit = (data) => {
-    // Handle register logic here
-    console.log("Data:", data);
+  const onSubmit = async (data) => {
+    try {
+      console.log("Data being sent:", {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        password_confirmation: data.confirmPassword,
+      });
+
+      const response = await axios.post(`http://localhost:8000/api/register`, {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        password_confirmation: data.confirmPassword,
+      });
+
+      const result = response.data;
+      console.log("Data:", result);
+      if (result.success) {
+        // Handle successful registration here
+        console.log("User:", result.user);
+      } else {
+        // Handle registration failure here
+        console.log("Registration failed");
+      }
+    } catch (error) {
+      if (error.response) {
+        // Log the server error response for debugging
+        console.error("Error response data:", error.response.data);
+      } else {
+        // Other errors
+        console.error("Error:", error.message);
+      }
+    }
   };
 
   return (
@@ -66,7 +98,7 @@ export default function RegisterCard() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
           <div className="mb-6">
-            <Image src="/logo.png" alt="Logo" width={400} height={400} />
+            <Image src="/images/logo.png" alt="Logo" width={400} height={400} />
           </div>
           <Card className="max-w-sm w-full">
             <CardHeader className="text-left">
@@ -75,7 +107,7 @@ export default function RegisterCard() {
             </CardHeader>
             <CardContent>
               <FormField
-                name="fullName"
+                name="name"
                 control={control}
                 render={({ field }) => (
                   <FormItem>
@@ -88,8 +120,8 @@ export default function RegisterCard() {
                         className="w-full"
                       />
                     </FormControl>
-                    {errors.fullName && (
-                      <FormMessage>{errors.fullName.message}</FormMessage>
+                    {errors.name && (
+                      <FormMessage>{errors.name.message}</FormMessage>
                     )}
                   </FormItem>
                 )}

@@ -19,7 +19,7 @@ function Certificate() {
       </div>
       <div className="md:w-1/2 mt-6 md:mt-0 md:ml-8">
         <Image
-          src={"/certificate.png"}
+          src={"/images/certificate.png"}
           alt="Certificate"
           width={500}
           height={500}

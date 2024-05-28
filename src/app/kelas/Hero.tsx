@@ -32,7 +32,7 @@ function Hero() {
       </div>
       <div className="mt-6 md:mt-0 md:ml-8">
         <Image
-          src="/class/class1.png"
+          src="/images/class/class1.png"
           alt="Hero"
           width={500}
           height={500}
