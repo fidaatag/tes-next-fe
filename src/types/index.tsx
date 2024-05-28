@@ -41,7 +41,7 @@ export interface ListKelas {
 export interface Section {
   id?: number; 
   course_id?:    number;
-  section_title: string;
+  section_title?: string;
   created_by?: number;
   updated_by?: number;
   created_at?: string;
@@ -50,8 +50,15 @@ export interface Section {
 }
 
 export interface Module {
-  id_module:    number;
-  title_module: string;
+  id?: number;
+  section_id?:    number;
+  module_title?: string;
+  description?: string;
+  status?: string;
+  created_by?: number;
+  updated_by?: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 

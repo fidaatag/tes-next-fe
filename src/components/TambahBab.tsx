@@ -11,14 +11,16 @@ import { useEffect, useState } from "react"
 type TambahBabProps = {
   dataBab: any;
   sections?: Section[];
+  course_id?: any;
 }
 
-const TambahBab = ({dataBab, sections}: TambahBabProps) => {
+const TambahBab = ({dataBab, sections, course_id}: TambahBabProps) => {
   const [babs, setBabs] = useState<Section[]>([])
   const [inputBab, setInputBab] = useState("")
 
   // saat pertama : mendapatkan data yg tersedia || saat sudh di isi : mengirim data terbaru ke page.tsx
   dataBab(babs)
+  
 
   useEffect(() => {
     if (sections) {
@@ -74,17 +76,18 @@ const TambahBab = ({dataBab, sections}: TambahBabProps) => {
                   <Popover>
                       <PopoverTrigger className="text-3xl font-extrabold">⋮</PopoverTrigger>
                       <PopoverContent className="flex flex-col gap-3">
-                        <Link href="#"><p className="hover:underline">Tambah Materi</p></Link>
-                        <Link href="#"><p className="hover:underline">Tambah Kuis</p></Link>
-                        <Link href="#"><p className="hover:underline">Tambah Forum</p></Link>
-                        <Link href="#"><p className="hover:underline border-t-2 border-dashed pt-2">Set for Free Access</p></Link>
+                          <Link href={`/dashboard/kelas/${course_id}/edit/tambah-materi-bab-${bab.id}`}><p className="hover:underline">Tambah Materi</p></Link>
+                          <Link href="#"><p className="hover:underline">Tambah Kuis</p></Link>
+                          <Link href="#"><p className="hover:underline">Tambah Forum</p></Link>
+                          <Link href="#"><p className="hover:underline border-t-2 border-dashed pt-2">Set for Free Access</p></Link>
                       </PopoverContent>
                   </Popover>
                 </div>
                 <AccordionContent>
-                  <p>tes hasil tambah materi</p>
-                  <p>tes hasil tambah materi</p>
-                  <p>tes hasil tambah materi</p>
+                  {bab.modules?.map((modul: any) => (
+                    <Link href={`/dashboard/kelas/${course_id}/edit/${bab.id}/${modul.id}`}><p>{modul.module_title}</p></Link>
+                  ))}
+                  
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
