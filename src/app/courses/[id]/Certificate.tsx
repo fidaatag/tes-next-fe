@@ -1,8 +1,13 @@
 import React from "react";
 import { Button } from "@/src/components/ui/button";
 import Image from "next/image";
+import { Course } from "@/src/types";
 
-function Certificate() {
+interface CertificateProps {
+  course: Course;
+}
+
+const Certificate: React.FC<CertificateProps> = ({ course }) => {
   return (
     <div className="p-6 md:p-16 flex flex-col md:flex-row items-center bg-gray-100">
       <div className="md:w-1/2">
@@ -11,7 +16,7 @@ function Certificate() {
         </h2>
         <p className="text-gray-700 mb-6">
           Kejar Sertifikat Terverifikasi untuk menyoroti pengetahuan dan
-          keterampilan yang Anda peroleh Rp.235.000
+          keterampilan yang Anda peroleh Rp. {course.price}
         </p>
         {/* <Button className="bg-blue-600 text-white py-2 px-4 rounded">
           Dapatkan Sertifikat
@@ -19,7 +24,7 @@ function Certificate() {
       </div>
       <div className="md:w-1/2 mt-6 md:mt-0 md:ml-8">
         <Image
-          src={"/certificate.png"}
+          src={"/images/certificate.png"}
           alt="Certificate"
           width={500}
           height={500}

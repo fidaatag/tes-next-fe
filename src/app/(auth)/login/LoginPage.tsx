@@ -22,6 +22,7 @@ import {
 } from "@/src/components/ui/form";
 import { BiSolidShow, BiSolidHide } from "react-icons/bi";
 import Image from "next/image";
+import axios from "axios";
 
 // Definisikan skema validasi menggunakan zod
 const loginSchema = z.object({
@@ -43,9 +44,30 @@ export default function LoginCard() {
     formState: { errors },
   } = methods;
 
-  const onSubmit = (data) => {
-    // Handle login logic here
-    console.log("Data:", data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/login`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const result = response.data;
+      console.log("Data:", result);
+      if (result.success) {
+        // Handle successful login here (e.g., store token, redirect, etc.)
+        console.log("User:", result.user);
+        console.log("Token:", result.token);
+      } else {
+        // Handle login failure here
+        console.log("Login failed");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -53,7 +75,7 @@ export default function LoginCard() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
           <div className="mb-6">
-            <Image src="/logo.png" alt="Logo" width={400} height={400} />
+            <Image src="/images/logo.png" alt="Logo" width={400} height={400} />
           </div>
           <Card className="max-w-sm w-full">
             <CardHeader className="text-left">
