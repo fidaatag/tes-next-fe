@@ -13,9 +13,9 @@ function Certificate() {
           Kejar Sertifikat Terverifikasi untuk menyoroti pengetahuan dan
           keterampilan yang Anda peroleh Rp.235.000
         </p>
-        <Button className="bg-blue-600 text-white py-2 px-4 rounded">
+        {/* <Button className="bg-blue-600 text-white py-2 px-4 rounded">
           Dapatkan Sertifikat
-        </Button>
+        </Button> */}
       </div>
       <div className="md:w-1/2 mt-6 md:mt-0 md:ml-8">
         <Image
