@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback } from "@/../../src/components/ui/avatar";
-import { SiswaUAS } from "@/../../src/types";
+import { SiswaUAS } from "@/src/types/index";
 
 interface NamaSiswaUASProps {
   siswa: SiswaUAS[];

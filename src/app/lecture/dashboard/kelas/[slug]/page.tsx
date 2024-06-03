@@ -28,7 +28,7 @@ const PageDetailKelas = async ({ params }: PageDetailKelasProps) => {
         <div className="flex justify-between items-center mb-8">
           <NamaKelas isikelas={DataKelas.data} />
           <div className="w-1/2 flex justify-end">
-            <Link href={`/dashboard/kelas/${id}/edit`}>
+            <Link href={`${id}/edit`}>
               <Button className="bg-blue-400" variant="outline">
                 Edit Kelas
               </Button>

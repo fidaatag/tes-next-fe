@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/src/components/ui/button";
 import FormKelas from "@/src/components/form/FormKelas";
-import { ListKelas } from "@/src/types";
+import { ListKelas } from "@/src/types/index";
 import {
   APIDetailKelas,
   APIEditKelas,

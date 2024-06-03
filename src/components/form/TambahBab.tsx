@@ -19,7 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/src/components/ui/popover";
-import { Section } from "@/src/types";
+import { Section } from "@/src/types/index";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -93,7 +93,7 @@ const TambahBab = ({
       // jika sdh ada bab di db
     } else {
       router.push(
-        `/dashboard/kelas/${course_id}/edit/tambah-materi-bab-${babId}`
+        `edit/tambah-materi-bab-${babId}`
       );
     }
   };
@@ -165,7 +165,7 @@ const TambahBab = ({
                 <AccordionContent className="flex flex-col gap-2">
                   {bab.modules?.map((modul: any) => (
                     <Link
-                      href={`/dashboard/kelas/${course_id}/edit/${bab.id}/${modul.id}`}
+                      href={`edit/${bab.id}/${modul.id}`}
                       className="hover:underline"
                     >
                       <p>{modul.module_title}</p>

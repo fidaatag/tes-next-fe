@@ -1,4 +1,4 @@
-import { ListKelas } from "@/src/types";
+import { ListKelas } from "@/src/types/index";
 import {
   Breadcrumb,
   BreadcrumbItem,
