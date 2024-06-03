@@ -1,15 +1,15 @@
-import { ItemsNav } from "@/../../src/types";
+import { ItemsNav } from "@/src/types/index";
 
 export const LinkItemsNav: ItemsNav[] = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/lecture/dashboard",
     icon: "💨 ",
     label: "Dashboard",
   },
   {
     title: "Kelas",
-    href: "/dashboard/kelas",
+    href: "/lecture/dashboard/kelas",
     icon: "🧷 ",
     label: "kelas",
   },
