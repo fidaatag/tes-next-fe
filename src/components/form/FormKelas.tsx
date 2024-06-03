@@ -162,6 +162,9 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
     // * ------- sisi kiri -------------
     const [cariKategori, setCariKategori] = useState("");
     const [hasilCariKategori, setHasilCariKategori] = useState<KategoriKLS[]>([]);
+
+    // DataKategoriKelas diganti data dari db
+
     useEffect(() => {
       const hasilPencarian = DataKategoriKelas.filter((item) =>
         item.kategori.toLowerCase().includes(cariKategori.toLowerCase())
@@ -169,25 +172,6 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
   
       setHasilCariKategori(hasilPencarian);
     }, [cariKategori]);
-  
-    const [tags, setTags] = useState<TagKLS[]>([]);
-    const tambahTag = (e: any) => {
-      if (e.key === "Enter" && e.target.value.length > 0) {
-        const newTag: TagKLS = {
-          id: tags.length + 1,
-          tag: e.target.value,
-        };
-  
-        setTags((prevTags) => [...prevTags, newTag]);
-        e.target.value = "";
-      }
-    };
-  
-    const hapusTag = (hapus: any) => {
-      const sisaTag = tags.filter((tag: any) => tag !== hapus);
-      setTags(sisaTag);
-    };
-
 
   return (
     <>
@@ -478,7 +462,6 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
                     placeholder="Cari Kategori"
                     value={cariKategori}
                     onChange={(e) => setCariKategori(e.target.value)}
-                    disabled
                   />
                   <div className="mt-4 ml-4 h-20 overflow-y-scroll space-y-2">
                     <div className="flex gap-2 items-center">
@@ -501,7 +484,6 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
                       <Checkbox/>
                       <p className="text-sm">Sastra</p>
                     </div>
-                    
                   </div>
                 </div>
               </div>
