@@ -1,50 +1,85 @@
-"use client"
+"use client";
 
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { APIDetailMateri, APIEditMateri } from "@/src/service/ApiMateri";
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { Upload } from "lucide-react";
+import CustomAlertDialog from "@/src/components/CustomAlertDialog";
+import { useDialogHandlers } from "@/src/hooks/UseProgressDialog";
+import { useApiErrorHandler } from "@/src/hooks/UseApiErrorHandler";
 
 type PageEditMateriProps = {
-  params: { materi: string }
-}
+  params: { materi: string };
+};
 
-const TextEditor = dynamic(() => import("./TextEditor"), { ssr: false });
+const TextEditor = dynamic(
+  () => import("@/src/components/text_editor/TextEditor"),
+  { ssr: false }
+);
 
-const pageEditMateri = ({params} : PageEditMateriProps) => {
+const pageEditMateri = ({ params }: PageEditMateriProps) => {
   const module_id = params.materi;
-
-  const dataLamaMateri = async () => {
-    const respon = await APIDetailMateri(module_id);
-    console.log(respon)
-    setDataMateri({
-      module_title: respon.module_title,
-      description: respon.description
-    });
-  }
-
-  useEffect(() => {
-    dataLamaMateri();
-  }, [module_id]);
-
+  const [error, setError] = useState("");
+  const {
+    munculDialog,
+    pesanDialog,
+    progressTimer,
+    setProgressTimer,
+    showDialog,
+  } = useDialogHandlers();
+  const { handleApiError } = useApiErrorHandler();
   const [dataMateri, setDataMateri] = useState({
     module_title: "",
     description: "",
   });
 
-  const handleSubmitMateri = async () => {
-    const respon = await APIEditMateri(dataMateri, module_id);
-    console.log(respon);
+  const dataLamaMateri = async () => {
+    const respon = await APIDetailMateri(module_id);
+    setDataMateri({
+      module_title: respon.module_title,
+      description: respon.description,
+    });
   };
 
-  console.log(dataMateri)
+  useEffect(() => {
+    dataLamaMateri();
+  }, [module_id]);
+
+  const handleSubmitMateri = async () => {
+    if (!dataMateri.module_title.trim()) {
+      setError("Judul Materi tidak boleh kosong");
+    } else {
+      setError("");
+
+      setProgressTimer(0);
+      showDialog(<Upload />, "Sedang mengupload data...", true);
+
+      const respon = await APIEditMateri(dataMateri, module_id);
+
+      if (respon) {
+        showDialog(
+          <Upload />,
+          `Data Materi ${respon.module.module_title} berhasil di update`
+        );
+      }
+
+      handleApiError(respon);
+    }
+  };
 
   return (
     <>
+      <CustomAlertDialog
+        open={munculDialog}
+        pesanDialog={pesanDialog}
+        progressTimer={progressTimer}
+      />
+
       <div>
         <div className="flex justify-between items-center p-4">
-          <h1 className="text-xl font-bold">Tambah Kelas</h1>
+          <h1 className="text-xl font-bold">Edit Materi Kelas</h1>
 
           <Button variant="secondary" onClick={() => handleSubmitMateri()}>
             Simpan
@@ -58,17 +93,19 @@ const pageEditMateri = ({params} : PageEditMateriProps) => {
           <div className="col-span-3 flex flex-col gap-4 px-4 pt-4">
             <Input
               placeholder="Judul Materi"
-              className="w-full mb-3"
-              onChange={(e) =>
-                setDataMateri({ ...dataMateri, module_title: e.target.value })
-              }
+              className="w-full"
               value={dataMateri?.module_title}
+              onChange={(e) => {
+                setDataMateri({ ...dataMateri, module_title: e.target.value });
+                if (error) setError("");
+              }}
             />
+            {error && <p className="text-sm text-red-500 mb-3">{error}</p>}
             <TextEditor
-              valueText={(e: any) =>
+              value={dataMateri.description}
+              onChange={(e: any) =>
                 setDataMateri({ ...dataMateri, description: e })
               }
-              value={dataMateri?.description}
             />
           </div>
 

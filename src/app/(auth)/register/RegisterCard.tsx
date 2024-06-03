@@ -59,7 +59,7 @@ export default function RegisterCard() {
 
   const onSubmit = async (data) => {
     try {
-      console.log("Data being sent:", {
+      
         name: data.name,
         email: data.email,
         password: data.password,
@@ -74,13 +74,13 @@ export default function RegisterCard() {
       });
 
       const result = response.data;
-      console.log("Data:", result);
+      
       if (result.success) {
         // Handle successful registration here
-        console.log("User:", result.user);
+        
       } else {
         // Handle registration failure here
-        console.log("Registration failed");
+        
       }
     } catch (error) {
       if (error.response) {

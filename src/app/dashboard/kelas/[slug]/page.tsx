@@ -11,31 +11,34 @@ import NamaKelas from "./NamaKelas";
 import NamaSiswaUAS from "./NamaSiswaUAS";
 import { DataListKelas, DataNamaSiswaUAS } from "@/src/constants/example";
 import Link from "next/link";
+import { APIDetailKelas } from "@/src/service/ApiKelas";
 
 type PageDetailKelasProps = {
   params: { slug: string };
 };
 
-const PageDetailKelas = ({ params }: PageDetailKelasProps) => {
+const PageDetailKelas = async ({ params }: PageDetailKelasProps) => {
   const id = params.slug[0];
+
+  const DataKelas = await APIDetailKelas(id);
 
   return (
     <>
       <div className="m-8">
         <div className="flex justify-between items-center mb-8">
-          <NamaKelas isikelas={DataListKelas} params={id} />
+          <NamaKelas isikelas={DataKelas.data} />
           <div className="w-1/2 flex justify-end">
             <Link href={`/dashboard/kelas/${id}/edit`}>
-            <Button className="bg-blue-400" variant="outline">
-              Edit Kelas
-            </Button>
+              <Button className="bg-blue-400" variant="outline">
+                Edit Kelas
+              </Button>
             </Link>
           </div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-4 h-screen row-start-1 md:row-start-2">
           <div className="col-span-2 order-2">
-            <IsiMateriKelas isikelas={DataListKelas} params={id} />
+            <IsiMateriKelas isikelas={DataKelas.data} />
           </div>
 
           <div className="flex md:flex-col px-2 gap-4 md:order-last">

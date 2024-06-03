@@ -18,8 +18,8 @@ import {
   SelectValue,
 } from "@/src/components/ui/select";
 import { Textarea } from "@/src/components/ui/textarea";
-import { DataKategoriKelas } from "@/src/constants/example";
-import { DipelajariKLS, KategoriKLS, ListKelas, TagKLS } from "@/src/types";
+import { DataInstrukturKelas, DataKategoriKelas } from "@/src/constants/example";
+import { DipelajariKLS, InstrukturKLS, KategoriKLS, ListKelas, TagKLS } from "@/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
@@ -27,6 +27,7 @@ import { z } from "zod";
 import TambahBab from "./TambahBab";
 import { Button } from "@/src/components/ui/button";
 import { Edit, Trash } from "lucide-react";
+import { toast } from "sonner";
 
 
 const formSchema = z.object({
@@ -46,22 +47,14 @@ type FormKelasProps = {
   oldData? : ListKelas;
   respon?: (data: any) => void;
   dataBab?: any;
+  addForm?: (data: any) => void;
 }
 
 
-const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab} : FormKelasProps) => {
+const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : FormKelasProps) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    // defaultValues: {
-    //   name: oldData?.name,
-    //   description: oldData?.about,
-    //   duration: oldData?.duration,
-    //   effort_taken: oldData?.effort_taken,
-    //   price: oldData?.price,
-    //   language: oldData?.language,
-    //   transkrip_video: oldData?.language,
-    // },
   });
 
   const { control } = form
@@ -78,20 +71,93 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab} : FormKelasProp
   // * ------- sisi kanan -------------
   const [pelajari, setPelajari] = useState<DipelajariKLS[]>([])
   const [inputPelajari, setInputPelajari] = useState("")
+  const [editPelajariId, setEditPelajariId] = useState(null)
 
-  const tambahPelajari = () => {
-    const newPelajari: DipelajariKLS = {
-      id: pelajari.length + 1,
-      pelajari: inputPelajari,
-    };
+  const ButtonPelajari = (event: any) => {
+    event.preventDefault()
 
-    setPelajari((prevPelajari) => [...prevPelajari, newPelajari]);
+    if (editPelajariId !== null) {
+      setPelajari((prevPelajari) =>
+        prevPelajari.map((item) =>
+          item.id === editPelajariId ? {...item, pelajari: inputPelajari} : item
+        )
+      );
+      setEditPelajariId(null)
+      setInputPelajari(" ")
+      const editedPelajari = pelajari.find(item => item.id === editPelajariId);
+      toast.warning(`${editedPelajari?.pelajari} sudah diedit`);
+
+    } else {
+      const newPelajari: DipelajariKLS = {
+        id: pelajari.length + 1,
+        pelajari: inputPelajari,
+      };
+  
+      setPelajari((prevPelajari) => [...prevPelajari, newPelajari]);
+      setInputPelajari(" ")
+      toast.success(`${newPelajari.pelajari} ditambahkan`)
+    }
   };
 
   const hapusPelajari = (hapus: any) => {
     const sisaPelajari = pelajari.filter((tag: any) => tag.id !== hapus.id);
     setPelajari(sisaPelajari);
+    toast.error(`${hapus?.pelajari} dihapus`)
   };
+
+  const editPelajari = (event: any, edit: any) => {
+    event.preventDefault();
+    setEditPelajariId(edit.id)
+    setInputPelajari(edit.pelajari)
+  }
+
+
+  const [cariInstruktur, setCariInstruktur] = useState("")
+  const [pilihanInstruktur, setPilihanInstruktur] = useState<InstrukturKLS[]>([])
+
+  useEffect(() => {
+    const hasilCariInstruktur = DataInstrukturKelas.filter((item) =>
+      item.guru.toLowerCase().includes(cariInstruktur.toLowerCase())
+    );
+
+    setPilihanInstruktur(hasilCariInstruktur)
+  }, [cariInstruktur])
+
+  const [instruktur, setInstruktur] = useState<number[]>([])
+  const tambahInstruktur = (event: any, id: number) => {
+    event.preventDefault()
+    
+    const insSudahAda = instruktur.includes(id)
+
+    if(!insSudahAda) {
+      setInstruktur([...instruktur, id]);
+      setPilihanInstruktur(sisaPilihanInstruktur => sisaPilihanInstruktur.filter(ins => ins.id !== id));
+    }
+
+    const yangDitambah = DataInstrukturKelas.find(item => item.id === id);
+    toast.success(`instruktur ${yangDitambah?.guru} ditambahkan`)
+  }
+
+  const hapusInstruktur = (event:any, hapus: any) => {
+    event.preventDefault()
+    const idHapus = parseInt(hapus.id, 10); // Ubah id menjadi integer
+    const sisaInstruktur = instruktur.filter((tag: any) => tag !== idHapus);  
+    
+    setInstruktur(sisaInstruktur);
+
+    // Memeriksa apakah instruktur yang dihapus sudah ada di dalam pilihanInstruktur sebelum menambahkannya kembali
+    const instrukturYangDihapus = DataInstrukturKelas.find(ins => ins.id === idHapus);
+    if (instrukturYangDihapus && !pilihanInstruktur.some(ins => ins.id === idHapus)) {
+      setPilihanInstruktur([...pilihanInstruktur, instrukturYangDihapus]);
+    }
+
+    const yangDihapus = DataInstrukturKelas.find(item => item.id === hapus.id);
+    toast.success(`instruktur ${yangDihapus?.guru} dihapus`)
+  }
+
+  const instrukturSaya = DataInstrukturKelas.filter(ins => instruktur.includes(ins.id))
+
+  
 
     // * ------- sisi kiri -------------
     const [cariKategori, setCariKategori] = useState("");
@@ -172,86 +238,98 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab} : FormKelasProp
 
               {/* area yang dipelajari */}
               <div className="w-full">
-              <h3 className="mt-10 font-extrabold mb-5">Apa yang Dipelajari</h3>
+                <h3 className="mt-10 font-extrabold mb-5">Apa yang Dipelajari</h3>
 
-              <div className="mb-1">
-                <div className="flex gap-2 items-center">
-                  <p>◾</p>
-                  <p>Menjadi insan manusia yang berakhlak mulia</p>
-                  <div className="flex gap-2 ml-10">
-                    <Edit className="w-3 h-3 opacity-50  group-hover:opacity-80" />
-                    <Trash className="w-3 h-3 opacity-50  group-hover:opacity-80" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="mb-1">
-                <div className="flex gap-2 items-center">
-                  <p>◾</p>
-                  <p>Menjadi insan manusia yang berakhlak mulia</p>
-                  <div className="flex gap-2 ml-10">
-                    <Edit className="w-3 h-3 opacity-50  group-hover:opacity-80" />
-                    <Trash className="w-3 h-3 opacity-50  group-hover:opacity-80" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <div className="flex gap-2 items-center">
-                  <p>◾</p>
-                  <p>Menjadi insan manusia yang berakhlak mulia</p>
-                  <div className="flex gap-2 ml-10">
-                    <Edit className="w-3 h-3 opacity-50  group-hover:opacity-80" />
-                    <Trash className="w-3 h-3 opacity-50  group-hover:opacity-80" />
-                  </div>
-                </div>
-              </div>
-              
-              <Input 
-              className="mb-2"
-              placeholder="Menjadi Insan manusia yang berakhlak mulia" 
-              onChange={(e) => setInputPelajari(e.target.value)}
-              disabled/>
-              <Button variant="secondary" onClick={tambahPelajari} className="w-full">+ Tambahkan</Button>
+                {pelajari.length > 0 ? (
+                  pelajari.map((pel) => ( 
+                    <div className="flex gap-2 items-start w-3/4 space-y-2 hover:border-b">
+                      <p className="mt-2">◾</p>
+                      <p className="flex-1">{pel.pelajari}</p>
+                      <div className="flex gap-2 ml-10">
+                        <button 
+                          onClick={() => hapusPelajari(pel)}
+                          className="border p-1 rounded-sm hover:bg-red-100"
+                        ><Trash className="w-3 h-3 opacity-50  group-hover:opacity-80"/>
+                        </button>
+                        <button 
+                          onClick={(e) => editPelajari(e, pel)}
+                          className="border p-1 rounded-sm hover:bg-purple-100"
+                        ><Edit className="w-3 h-3 opacity-50  group-hover:opacity-80"/>
+                        </button>
+                      </div>
+                    </div>     
+                  ))) : (
+                  <p className="italic text-sm opacity-50">Belum ada item yang dipelajari.</p>
+                  )
+                }
+                <Input 
+                  className="mt-5"
+                  placeholder="Menjadi Insan manusia yang berakhlak mulia" 
+                  onChange={(e) => setInputPelajari(e.target.value)}
+                  value={inputPelajari}
+                />
+                <Button 
+                  variant="secondary" 
+                  onClick={ButtonPelajari}
+                  className="w-full mt-4"
+                >{editPelajariId !== null ? "Edit" : "+ Tambahkan"}
+                </Button>
               </div>
 
 
               {/* area tambah instruktur */}
-              <h3 className="font-extrabold mt-10">Anggota Instruktur/Dosen Pengajar</h3>
-              <Input placeholder="Cari Instruktur" disabled/>
-              <div>
-                <div className="flex justify-between border-2 p-4">
-                  <p>Devi Permatasari, S.E., M.Si</p>
-                  <button className="underline text-blue-400">Tambahkan</button>
-                </div>
-                <div className="flex justify-between border-2 p-4">
-                  <p>Devi Permatasari, S.E., M.Si</p>
-                  <button className="underline text-blue-400">Tambahkan</button>
-                </div>
-              </div>
+              <div className="w-full">
+                <h3 className="font-extrabold mt-10">Anggota Instruktur/Dosen Pengajar</h3>
+                <Input
+                  className="mt-3"
+                  placeholder="Cari Instruktur"
+                  onChange={(e) => setCariInstruktur(e.target.value)}
+                />
 
-              <div className="flex flex-col gap-4 mb-10">
-                <div className="flex gap-4 items-center">
-                  <div className="h-16 w-16 rounded-full bg-gray-300"></div>
-                  <div>
-                    <p className="font-extrabold">Prof. Olivia Fachrunnisa, S.E</p>
-                    <p>Doctor of Philosophy (Ph.D), Curtin University, Perth, Australia</p>
-                    <p>Knowledge Management</p>
-                  </div>
+                <div className="h-40 overflow-y-scroll mt-2">
+                  {pilihanInstruktur.length > 0 ? (
+                    pilihanInstruktur.map((ins) => (
+                      <div className="flex justify-between border-2 rounded-md p-4 mb-4" key={ins.id}>
+                        <p>{ins.guru}</p>
+                        <button 
+                          className="underline text-blue-400" 
+                          onClick={(event)=>tambahInstruktur(event, ins?.id)}
+                        >Tambahkan</button>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="italic text-sm opacity-50 mt-10">Instruktur yang dicari tidak ada.</p>
+                  )}
                 </div>
-                <div className="flex gap-4 items-center">
-                  <div className="h-16 w-16 rounded-full bg-gray-300"></div>
-                  <div>
-                    <p className="font-extrabold">Prof. Olivia Fachrunnisa, S.E</p>
-                    <p>Doctor of Philosophy (Ph.D), Curtin University, Perth, Australia</p>
-                    <p>Knowledge Management</p>
-                  </div>
-                </div>
-              </div>   
+
+
+                <div className="flex flex-col gap-4 mb-10 mt-4">
+                  {instrukturSaya.length > 0 ? (
+                    instrukturSaya.map((ins) => (
+                      <div className="flex gap-4 items-center hover:bg-slate-50 rounded-lg px-1" key={ins.id}>
+                        <div className="h-16 w-16 rounded-full bg-gray-300"></div>
+                        <div className="flex-1">
+                          <p className="font-extrabold">{ins.guru}</p>
+                          <p>Doctor of Philosophy (Ph.D), Curtin University, Perth, Australia</p>
+                          <p>Knowledge Management</p>
+                        </div>
+                        <button 
+                          className="border p-1 rounded-sm hover:bg-red-100"
+                          onClick={() => hapusInstruktur(event ,ins)}
+                        ><Trash className="w-3 h-3 opacity-50  group-hover:opacity-80"/>
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="italic text-sm opacity-50 mt-10">Belum ada Instruktur yang dipilih.</p>
+                  )}
+                </div> 
+              </div>
+                
 
               
               {/* area tambah kelas */}
-              <TambahBab dataBab={(e: any) => dataBab(e)} sections={oldData?.sections} course_id={oldData?.id}/>
+              <TambahBab dataBab={(e: any) => dataBab(e)} sections={oldData?.sections} course_id={oldData?.id} isAddForm={addForm}/>
 
             </div>
 

@@ -1,25 +1,22 @@
-import { ListKelas } from "@/../../src/types";
+import { ListKelas } from "@/src/types";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
-} from "@/../../src/components/ui/breadcrumb";
+} from "@/src/components/ui/breadcrumb";
 import Link from "next/link";
 
 interface NamaKelasProps {
-  isikelas: ListKelas[];
-  params: String;
+  isikelas: ListKelas;
 }
 
-const NamaKelas = ({ isikelas, params }: NamaKelasProps) => {
-  const detailKelas = isikelas.find((kelas: any) => kelas.id == params);
-
+const NamaKelas = ({ isikelas }: NamaKelasProps) => {
   return (
     <>
       <div className="md:flex justify-between w-full">
         <h1 className="text-lg font-semibold">
-          {detailKelas?.title} - {detailKelas?.status}
+          {isikelas?.name} - {isikelas?.status}
         </h1>
         <Breadcrumb>
           <BreadcrumbList>
@@ -28,7 +25,7 @@ const NamaKelas = ({ isikelas, params }: NamaKelasProps) => {
             </BreadcrumbItem>
             <p>/</p>
             <BreadcrumbItem>
-              <BreadcrumbPage>{detailKelas?.title}</BreadcrumbPage>
+              <BreadcrumbPage>{isikelas?.name}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

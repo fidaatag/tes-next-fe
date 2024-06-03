@@ -56,14 +56,11 @@ export default function LoginCard() {
         }
       );
       const result = response.data;
-      console.log("Data:", result);
+      
       if (result.success) {
         // Handle successful login here (e.g., store token, redirect, etc.)
-        console.log("User:", result.user);
-        console.log("Token:", result.token);
       } else {
         // Handle login failure here
-        console.log("Login failed");
       }
     } catch (error) {
       console.error("Error:", error);

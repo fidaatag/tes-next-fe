@@ -1,10 +1,13 @@
-"use server"
+"use server";
 
 import axios from "axios";
 
-const token  = process.env.TOKEN
+const token = process.env.TOKEN;
 
-export const APIBuatBab = async (formData: any, course_id: any): Promise<any> => {
+export const APIBuatBab = async (
+  formData: any,
+  course_id: any
+): Promise<any> => {
   const dataCreateBab = {
     course_id: course_id,
     section_title: formData.section_title,
@@ -13,14 +16,15 @@ export const APIBuatBab = async (formData: any, course_id: any): Promise<any> =>
   };
 
   try {
-    const response = await axios.post("http://localhost:8000/api/admin/sections", dataCreateBab,
+    const response = await axios.post(
+      "http://localhost:8000/api/admin/sections",
+      dataCreateBab,
       {
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
 
     return response.data;
-
   } catch (error) {
     throw error;
   }

@@ -1,10 +1,13 @@
-"use server"
+"use server";
 
 import axios from "axios";
 
-const token  = process.env.TOKEN
+const token = process.env.TOKEN;
 
-export const APIBuatKelas = async (formData: any, status: string) : Promise<any> => { 
+export const APIBuatKelas = async (
+  formData: any,
+  status: string
+): Promise<any> => {
   const dataCreateKelas = {
     name: formData?.name,
     description: formData?.description,
@@ -18,24 +21,29 @@ export const APIBuatKelas = async (formData: any, status: string) : Promise<any>
     created_by: 40,
     updated_by: 9,
     course_category_id: 1,
-    is_superior: true
+    is_superior: true,
   };
 
   try {
-    const response = await axios.post("http://localhost:8000/api/admin/courses", dataCreateKelas, 
+    const response = await axios.post(
+      "http://localhost:8000/api/admin/courses",
+      dataCreateKelas,
       {
-        headers: {"Authorization" : `Bearer ${token}`}
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
 
     return response.data;
-
   } catch (error) {
-    throw error;
+    return { error: true, message: "API Tidak Aktif" };
   }
 };
 
-export const APIEditKelas = async(formData: any, status: string, id: string) => {
+export const APIEditKelas = async (
+  formData: any,
+  status: string,
+  id: string
+) => {
   const dataUpdateKelas = {
     name: formData?.name,
     description: formData?.description,
@@ -49,49 +57,65 @@ export const APIEditKelas = async(formData: any, status: string, id: string) => 
     created_by: 40,
     updated_by: 9,
     course_category_id: 1,
-    is_superior: true
+    is_superior: true,
   };
 
   try {
-    const response = await axios.put(`http://localhost:8000/api/admin/courses/${id}`, dataUpdateKelas,
+    const response = await axios.put(
+      `http://localhost:8000/api/admin/courses/${id}`,
+      dataUpdateKelas,
       {
-        headers: {"Authorization" : `Bearer ${token}`}
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
 
     return response.data;
-
   } catch (error) {
-    throw error;
+    return { error: true, message: "API Tidak Aktif" };
   }
 };
 
-export const APIDetailKelas = async(id: any) => {
+export const APIDetailKelas = async (id: any) => {
   try {
-    const response = await axios.get(`http://localhost:8000/api/admin/courses/${id}`, 
+    const response = await axios.get(
+      `http://localhost:8000/api/admin/courses/${id}`,
       {
-        headers: {"Authorization" : `Bearer ${token}`}
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
 
-    return response.data.data;
-
+    return response.data;
   } catch (error) {
-    throw error
+    return { error: true, message: "API Tidak Aktif" };
   }
 };
 
-export const APIHapusKelas = async(id: any) => {
+export const APIHapusKelas = async (id: any) => {
   try {
-    const response = await axios.delete(`http://localhost:8000/api/admin/courses/${id}`, 
+    const response = await axios.delete(
+      `http://localhost:8000/api/admin/courses/${id}`,
       {
-        headers: {"Authorization" : `Bearer ${token}`}
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
 
-    return response.data.data;
-
+    return response.data;
   } catch (error) {
-    throw error
+    return { error: true, message: "API Tidak Aktif" };
+  }
+};
+
+export const APISemuaKelas = async () => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8000/api/admin/courses`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return { error: true, message: "API Tidak Aktif" };
   }
 };
