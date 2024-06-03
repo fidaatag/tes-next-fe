@@ -18,6 +18,8 @@ export interface ItemsNav_WithOptionalChildren extends ItemsNav {
 
 
 export interface ListKelas {
+  data?: any
+  error?: boolean
   id: number
   name: string
   description: string
