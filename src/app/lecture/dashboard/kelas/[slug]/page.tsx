@@ -9,7 +9,7 @@ import {
 import IsiMateriKelas from "./IsiMateriKelas";
 import NamaKelas from "./NamaKelas";
 import NamaSiswaUAS from "./NamaSiswaUAS";
-import { DataListKelas, DataNamaSiswaUAS } from "@/src/constants/example";
+import { DataNamaSiswaUAS } from "@/src/constants/example";
 import Link from "next/link";
 import { APIDetailKelas } from "@/src/service/ApiKelas";
 
@@ -18,7 +18,7 @@ type PageDetailKelasProps = {
 };
 
 const PageDetailKelas = async ({ params }: PageDetailKelasProps) => {
-  const id = params.slug[0];
+  const id = params.slug;
 
   const DataKelas = await APIDetailKelas(id);
 
