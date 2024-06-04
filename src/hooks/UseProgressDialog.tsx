@@ -1,5 +1,4 @@
 import { FileWarning } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface DialogState {
@@ -27,7 +26,6 @@ export const useDialogHandlers = () => {
   };
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
     let interval: NodeJS.Timeout;
 
     if (munculDialog) {
@@ -35,23 +33,22 @@ export const useDialogHandlers = () => {
         setProgressTimer((prev) => {
           if (prev >= 100) {
             clearInterval(interval);
-            setMunculDialog(false);
             return 100;
           }
           return prev + 2;
         });
       }, 100);
 
-      timer = setTimeout(() => {
+      const timer = setTimeout(() => {
         clearInterval(interval);
         setMunculDialog(false);
       }, 5000);
-    }
 
-    return () => {
-      clearTimeout(timer);
-      clearInterval(interval);
-    };
+      return () => {
+        clearTimeout(timer);
+        clearInterval(interval);
+      };
+    }
   }, [munculDialog]);
 
   return {

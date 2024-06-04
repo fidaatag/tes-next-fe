@@ -54,7 +54,21 @@ const TambahPage = () => {
       }
     }
     
-    handleApiError(respon);
+    if (
+      respon?.status === "Token is Expired" ||
+      respon?.status === "Token is Invalid"
+    ) {
+      showDialog(<Link2Off />, "Anda sudah logout, silahkan Login kembali");
+      return;
+    }
+
+    if (respon?.message === "API Tidak Aktif") {
+      showDialog(
+        <Link2Off />,
+        "Aplikasi sedang ada perbaikan, silahkan hubungi Admin"
+      );
+      return;
+    }
   };
 
   // jika saat user tambah dan ingin nambah materi, data akan diupload dan diarahkan ke page edit
