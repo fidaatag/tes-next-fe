@@ -20,7 +20,7 @@ export const APIBuatKelas = async (
     image_cover: "default_image_cover",
     created_by: 40,
     updated_by: 9,
-    course_category_id: 1,
+    course_category_id: formData?.course_category_id,
     is_superior: true,
   };
 
@@ -56,7 +56,7 @@ export const APIEditKelas = async (
     image_cover: "default_image_cover",
     created_by: 40,
     updated_by: 9,
-    course_category_id: 1,
+    course_category_id: formData?.course_category_id,
     is_superior: true,
   };
 

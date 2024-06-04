@@ -1,6 +1,5 @@
 "use client"
 
-import { Checkbox } from "@/src/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -19,7 +18,7 @@ import {
 } from "@/src/components/ui/select";
 import { Textarea } from "@/src/components/ui/textarea";
 import { DataInstrukturKelas, DataKategoriKelas } from "@/src/constants/example";
-import { DipelajariKLS, InstrukturKLS, KategoriKLS, ListKelas, TagKLS } from "@/src/types";
+import { DipelajariKLS, InstrukturKLS, KategoriKLS, ListKelas, TagKLS } from "@/src/types/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
@@ -28,6 +27,7 @@ import TambahBab from "./TambahBab";
 import { Button } from "@/src/components/ui/button";
 import { Edit, Trash } from "lucide-react";
 import { toast } from "sonner";
+import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group"
 
 
 const formSchema = z.object({
@@ -38,6 +38,7 @@ const formSchema = z.object({
   price: z.coerce.number(),
   language: z.string(),
   transkrip_video: z.string(),
+  course_category_id: z.string(),
 });
 
 
@@ -162,7 +163,7 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
     // * ------- sisi kiri -------------
     const [cariKategori, setCariKategori] = useState("");
     const [hasilCariKategori, setHasilCariKategori] = useState<KategoriKLS[]>([]);
-
+ 
     // DataKategoriKelas diganti data dari db
 
     useEffect(() => {
@@ -464,26 +465,44 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
                     onChange={(e) => setCariKategori(e.target.value)}
                   />
                   <div className="mt-4 ml-4 h-20 overflow-y-scroll space-y-2">
-                    <div className="flex gap-2 items-center">
-                      <Checkbox/>
-                      <p className="text-sm">Sejarah</p>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                      <Checkbox/>
-                      <p className="text-sm">Ekonomi</p>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                      <Checkbox/>
-                      <p className="text-sm">Sains</p>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                      <Checkbox/>
-                      <p className="text-sm">Agama</p>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                      <Checkbox/>
-                      <p className="text-sm">Sastra</p>
-                    </div>
+                    {/* {hasilCariKategori.map((item) => (
+                      <div className="flex gap-2 items-center">
+                        <Checkbox/>
+                        <p className="text-sm">{item.kategori}</p>
+                      </div>
+                    ))} */}
+                    <FormField 
+                      control={form.control}
+                      name='course_category_id'
+                      render={({ field }) => (
+                        <FormControl>
+                          
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex flex-col space-y-1"
+                          >
+
+                            {hasilCariKategori.map((item) => (
+
+                              <FormItem className="flex items-end space-x-2">
+                                <FormControl>
+                                  <RadioGroupItem value={item.id.toString()} />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {item.kategori}
+                                </FormLabel>
+                              </FormItem>
+
+                            ))}
+
+                          </RadioGroup>
+
+                        </FormControl>
+                      )}
+                    />
+
+
                   </div>
                 </div>
               </div>
