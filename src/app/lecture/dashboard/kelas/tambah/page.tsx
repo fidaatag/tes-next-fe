@@ -49,7 +49,7 @@ const TambahPage = () => {
           `Data kelas ${respon.course.name} berhasil diupload.`
         );
         setTimeout(() => {
-          router.push("/dashboard/kelas");
+          router.push("/lecture/dashboard/kelas");
         }, 4000);
       }
     }
@@ -88,7 +88,7 @@ const TambahPage = () => {
               `Jika anda ingin menambah materi bab, anda akan diarahkan ke halaman edit data kelas ${respon.course.name} Anda tersimpan. Silahkan pilih bab yang akan ditambah materi`
             );
             setTimeout(() => {
-              router.push(`/dashboard/kelas/${course_id}/edit`);
+              router.push(`/lecture/dashboard/kelas/${course_id}/edit`);
             }, 4000);
           }
         }
