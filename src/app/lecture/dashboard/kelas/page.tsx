@@ -39,9 +39,10 @@ const PageKelas = () => {
       dataListKelas?.status === "Token is Invalid"
     ) {
       showDialog(<Link2Off />, "Anda sudah logout, silahkan Login kembali");
-      setTimeout(() => {
-        router.push(`/`)
-      }, 4000);
+      // buka komentar ini jika fitur login sudah ada
+      // setTimeout(() => {
+      //   router.push(`/`)
+      // }, 4000);
     }
 
     if (dataListKelas?.message === "API Tidak Aktif") {
