@@ -141,23 +141,23 @@ export const DataKategoriKelas: KategoriKLS[] = [
 export const DataInstrukturKelas: InstrukturKLS[] = [
   {
     id: 1,
-    guru: "Devi Permatasari, S.E"
+    full_name: "Devi Permatasari, S.E"
   },
   {
     id: 2,
-    guru: "Lala Atasari, S.E"
+    full_name: "Lala Atasari, S.E"
   },
   {
     id: 3,
-    guru: "Santi Perasari, S.E"
+    full_name: "Santi Perasari, S.E"
   },
   {
     id: 4,
-    guru: "Yanya Matasari, S.E"
+    full_name: "Yanya Matasari, S.E"
   },
   {
     id: 5,
-    guru: "Belro Tasari, S.E"
+    full_name: "Belro Tasari, S.E"
   },
 ]
 

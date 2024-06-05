@@ -98,5 +98,6 @@ export interface DipelajariKLS {
 
 export interface InstrukturKLS {
   id: number;
-  guru: string;
+  full_name: string;
+  jabatan?: null;
 }

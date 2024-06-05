@@ -29,6 +29,7 @@ import { Edit, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group"
 import { APISemuaKategori } from "@/src/service/ApiKategori";
+import { APIInstrukturKelas } from "@/src/service/ApiDosen";
 
 
 const formSchema = z.object({
@@ -114,12 +115,30 @@ console.log(valueForm)
   }
 
 
+  // * ---- area instruktur kelas
+
+  //console.log(DataInstrukturKelas)
+
   const [cariInstruktur, setCariInstruktur] = useState("")
   const [pilihanInstruktur, setPilihanInstruktur] = useState<InstrukturKLS[]>([])
+  const [dataInstrukturKelas, setDataInstrukturKelas] = useState<InstrukturKLS[]>([])
+
+  const [listInstruktur, setListInstruktur] = useState()
+  console.log(pilihanInstruktur)
+
+  const getDataInstruktur = async () => {
+    const respon = await APIInstrukturKelas()
+    setDataInstrukturKelas(respon.data)
+    setPilihanInstruktur(respon.data)
+  }
 
   useEffect(() => {
-    const hasilCariInstruktur = DataInstrukturKelas.filter((item) =>
-      item.guru.toLowerCase().includes(cariInstruktur.toLowerCase())
+    getDataInstruktur()
+  }, [])
+
+  useEffect(() => {
+    const hasilCariInstruktur = dataInstrukturKelas.filter((item) =>
+      item.full_name.toLowerCase().includes(cariInstruktur.toLowerCase())
     );
 
     setPilihanInstruktur(hasilCariInstruktur)
@@ -136,8 +155,8 @@ console.log(valueForm)
       setPilihanInstruktur(sisaPilihanInstruktur => sisaPilihanInstruktur.filter(ins => ins.id !== id));
     }
 
-    const yangDitambah = DataInstrukturKelas.find(item => item.id === id);
-    toast.success(`instruktur ${yangDitambah?.guru} ditambahkan`)
+    const yangDitambah = dataInstrukturKelas.find(item => item.id === id);
+    toast.success(`instruktur ${yangDitambah?.full_name} ditambahkan`)
   }
 
   const hapusInstruktur = (event:any, hapus: any) => {
@@ -148,16 +167,16 @@ console.log(valueForm)
     setInstruktur(sisaInstruktur);
 
     // Memeriksa apakah instruktur yang dihapus sudah ada di dalam pilihanInstruktur sebelum menambahkannya kembali
-    const instrukturYangDihapus = DataInstrukturKelas.find(ins => ins.id === idHapus);
+    const instrukturYangDihapus = dataInstrukturKelas.find(ins => ins.id === idHapus);
     if (instrukturYangDihapus && !pilihanInstruktur.some(ins => ins.id === idHapus)) {
       setPilihanInstruktur([...pilihanInstruktur, instrukturYangDihapus]);
     }
 
-    const yangDihapus = DataInstrukturKelas.find(item => item.id === hapus.id);
-    toast.success(`instruktur ${yangDihapus?.guru} dihapus`)
+    const yangDihapus = dataInstrukturKelas.find(item => item.id === hapus.id);
+    toast.success(`instruktur ${yangDihapus?.full_name} dihapus`)
   }
 
-  const instrukturSaya = DataInstrukturKelas.filter(ins => instruktur.includes(ins.id))
+  const instrukturSaya = dataInstrukturKelas.filter(ins => instruktur.includes(ins.id))
 
   
 
@@ -285,7 +304,7 @@ console.log(valueForm)
                   {pilihanInstruktur.length > 0 ? (
                     pilihanInstruktur.map((ins) => (
                       <div className="flex justify-between border-2 rounded-md p-4 mb-4" key={ins.id}>
-                        <p>{ins.guru}</p>
+                        <p>{ins.full_name}</p>
                         <button 
                           className="underline text-blue-400" 
                           onClick={(event)=>tambahInstruktur(event, ins?.id)}
@@ -304,7 +323,7 @@ console.log(valueForm)
                       <div className="flex gap-4 items-center hover:bg-slate-50 rounded-lg px-1" key={ins.id}>
                         <div className="h-16 w-16 rounded-full bg-gray-300"></div>
                         <div className="flex-1">
-                          <p className="font-extrabold">{ins.guru}</p>
+                          <p className="font-extrabold">{ins.full_name}</p>
                           <p>Doctor of Philosophy (Ph.D), Curtin University, Perth, Australia</p>
                           <p>Knowledge Management</p>
                         </div>
