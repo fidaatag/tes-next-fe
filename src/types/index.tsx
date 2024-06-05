@@ -73,7 +73,12 @@ export interface SiswaUAS {
 
 export interface KategoriKLS {
   id: number;
-  kategori: string;
+  category_name: string;
+  created_by?: number;
+  updated_by?: number;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: null;
 }
 
 export interface TagKLS {

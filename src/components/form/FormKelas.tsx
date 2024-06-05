@@ -28,6 +28,7 @@ import { Button } from "@/src/components/ui/button";
 import { Edit, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group"
+import { APISemuaKategori } from "@/src/service/ApiKategori";
 
 
 const formSchema = z.object({
@@ -68,7 +69,7 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
     }
   }, [valueForm, respon]);
 
-
+console.log(valueForm)
   // * ------- sisi kanan -------------
   const [pelajari, setPelajari] = useState<DipelajariKLS[]>([])
   const [inputPelajari, setInputPelajari] = useState("")
@@ -162,13 +163,22 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
 
     // * ------- sisi kiri -------------
     const [cariKategori, setCariKategori] = useState("");
-    const [hasilCariKategori, setHasilCariKategori] = useState<KategoriKLS[]>([]);
- 
-    // DataKategoriKelas diganti data dari db
+    const [hasilCariKategori, setHasilCariKategori] = useState<KategoriKLS[]>();
+    const [dataKategoriKelas, setdataKategoriKelas] = useState<KategoriKLS[]>();
+
+    const getDataKategori = async () => {
+      const respon = await APISemuaKategori()
+      setdataKategoriKelas(respon.data)
+      setHasilCariKategori(respon.data)
+    }
 
     useEffect(() => {
-      const hasilPencarian = DataKategoriKelas.filter((item) =>
-        item.kategori.toLowerCase().includes(cariKategori.toLowerCase())
+      getDataKategori()
+    }, [])
+
+    useEffect( () => {
+      const hasilPencarian = dataKategoriKelas?.filter((item) =>
+        item.category_name.toLowerCase().includes(cariKategori.toLowerCase())
       );
   
       setHasilCariKategori(hasilPencarian);
@@ -483,14 +493,14 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
                             className="flex flex-col space-y-1"
                           >
 
-                            {hasilCariKategori.map((item) => (
+                            {hasilCariKategori?.map((item) => (
 
                               <FormItem className="flex items-end space-x-2">
                                 <FormControl>
                                   <RadioGroupItem value={item.id.toString()} />
                                 </FormControl>
                                 <FormLabel className="font-normal">
-                                  {item.kategori}
+                                  {item.category_name}
                                 </FormLabel>
                               </FormItem>
 
