@@ -25,7 +25,7 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import TambahBab from "./TambahBab";
 import { Button } from "@/src/components/ui/button";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Image, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group"
 import { APISemuaKategori } from "@/src/service/ApiKategori";
@@ -70,7 +70,6 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
     }
   }, [valueForm, respon]);
 
-console.log(valueForm)
   // * ------- sisi kanan -------------
   const [pelajari, setPelajari] = useState<DipelajariKLS[]>([])
   const [inputPelajari, setInputPelajari] = useState("")
@@ -117,14 +116,9 @@ console.log(valueForm)
 
   // * ---- area instruktur kelas
 
-  //console.log(DataInstrukturKelas)
-
   const [cariInstruktur, setCariInstruktur] = useState("")
   const [pilihanInstruktur, setPilihanInstruktur] = useState<InstrukturKLS[]>([])
   const [dataInstrukturKelas, setDataInstrukturKelas] = useState<InstrukturKLS[]>([])
-
-  const [listInstruktur, setListInstruktur] = useState()
-  console.log(pilihanInstruktur)
 
   const getDataInstruktur = async () => {
     const respon = await APIInstrukturKelas()
@@ -202,6 +196,26 @@ console.log(valueForm)
   
       setHasilCariKategori(hasilPencarian);
     }, [cariKategori]);
+
+
+    // * ----- image logic
+    
+    const [pilihImg, setPilihImg] = useState<any>('')
+    const [postToApi, setPostToAPi] = useState({})
+
+    const handleUploadImg = (e: any) => {
+      const fileImg = e.target.files[0]
+      setPostToAPi(prev => ({ ...prev, file: fileImg }));
+      const reader = new FileReader()
+  
+      reader.onload = () => {
+        setPilihImg(reader.result)
+      }
+  
+      if (fileImg) {
+        reader.readAsDataURL(fileImg)
+      }
+    }
 
   return (
     <>
@@ -550,6 +564,29 @@ console.log(valueForm)
                 </div>
               </div>
 
+              
+              {/* Pilih Image */}
+              <div>
+                <div className="bg-gray-300">
+                  <h2 className="py-2 pl-2 ">Gambar Cover</h2>
+                </div>
+
+                <div className="flex flex-col gap-5 p-2">
+                  <div className="h-48 w-full rounded-lg bg-slate-100 flex justify-center items-center border">
+                    {pilihImg? (
+                      <img className="rounded-lg w-full h-full object-cover" src={pilihImg} alt="" />
+                    ) : (
+                      <Image className="text-slate-300 h-10 w-10" />
+                    )}          
+                  </div>
+                  <div>
+                    <input type="file" id="upload-img" className="hidden" onChange={handleUploadImg}/>
+                    <label htmlFor="upload-img" className="border-2 border-blue-500 text-blue-500 font-semibold text-sm p-2.5 cursor-pointer rounded-lg flex justify-center" >
+                      <p>Pilih Gambar</p>
+                    </label>
+                  </div>
+                </div>
+              </div>             
 
             </div>
 
