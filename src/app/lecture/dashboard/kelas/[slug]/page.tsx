@@ -11,7 +11,7 @@ import NamaKelas from "./NamaKelas";
 import NamaSiswaUAS from "./NamaSiswaUAS";
 import { DataNamaSiswaUAS } from "@/src/constants/example";
 import Link from "next/link";
-import { APIDetailKelas } from "@/src/service/ApiKelas";
+import { APIDetailKelasREAD } from "@/src/service/ApiKelas";
 
 type PageDetailKelasProps = {
   params: { slug: string };
@@ -20,7 +20,7 @@ type PageDetailKelasProps = {
 const PageDetailKelas = async ({ params }: PageDetailKelasProps) => {
   const id = params.slug;
 
-  const DataKelas = await APIDetailKelas(id);
+  const DataKelas = await APIDetailKelasREAD(id);
 
   return (
     <>

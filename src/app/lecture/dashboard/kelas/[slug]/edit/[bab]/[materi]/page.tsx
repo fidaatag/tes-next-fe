@@ -11,7 +11,7 @@ import { useDialogHandlers } from "@/src/hooks/UseProgressDialog";
 import { useApiErrorHandler } from "@/src/hooks/UseApiErrorHandler";
 
 type PageEditMateriProps = {
-  params: { materi: string };
+  params: { slug: string, bab: string, materi: string };
 };
 
 const TextEditor = dynamic(
@@ -20,6 +20,8 @@ const TextEditor = dynamic(
 );
 
 const pageEditMateri = ({ params }: PageEditMateriProps) => {
+  const course_id = params.slug;
+  const bab_id = params.bab;
   const module_id = params.materi;
   const [error, setError] = useState("");
   const {
@@ -36,10 +38,10 @@ const pageEditMateri = ({ params }: PageEditMateriProps) => {
   });
 
   const dataLamaMateri = async () => {
-    const respon = await APIDetailMateri(module_id);
+    const respon = await APIDetailMateri(course_id, bab_id, module_id);
     setDataMateri({
-      module_title: respon.module_title,
-      description: respon.description,
+      module_title: respon.data.module_title,
+      description: respon.data.description,
     });
   };
 
@@ -56,12 +58,11 @@ const pageEditMateri = ({ params }: PageEditMateriProps) => {
       setProgressTimer(0);
       showDialog(<Upload />, "Sedang mengupload data...", true);
 
-      const respon = await APIEditMateri(dataMateri, module_id);
-
+      const respon = await APIEditMateri(dataMateri,course_id, bab_id, module_id);
       if (respon) {
         showDialog(
           <Upload />,
-          `Data Materi ${respon.module.module_title} berhasil di update`
+          `Data Materi ${dataMateri.module_title} berhasil di update`
         );
       }
 

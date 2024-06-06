@@ -30,6 +30,7 @@ import { toast } from "sonner";
 import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group"
 import { APISemuaKategori } from "@/src/service/ApiKategori";
 import { APIInstrukturKelas } from "@/src/service/ApiDosen";
+import { BiObjectsHorizontalCenter } from "react-icons/bi";
 
 
 const formSchema = z.object({
@@ -64,11 +65,28 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
   const valueForm = useWatch({control})
   // data pada valueForm langsung di lempar di page.tsx saat pengisian data 
 
-  useEffect(() => {
-    if (respon) {
-      respon(valueForm);
+  const [dataForm, setDataForm] = useState({})
+// console.log(dataForm)
+  const filterValueUndefined = (obj: ListKelas): Partial<ListKelas> => {
+    const result: Partial<ListKelas> = {};
+    for (const key in obj) {
+      if (obj[key as keyof ListKelas] !== undefined) {
+        result[key as keyof ListKelas] = obj[key as keyof ListKelas];
+      }
     }
-  }, [valueForm, respon]);
+ 
+    return result;
+  }
+
+  // data yang akan dikirm ke API == data yang diisi saja
+  const valueFull = filterValueUndefined(valueForm)
+
+  useEffect(() => {
+    setDataForm(prev => ({...prev, ...valueFull}))
+    if (respon) {
+      respon(dataForm);     
+    }
+  }, [valueForm]); // !? ini kalo diisi valueFill Error : Maximum update depth exceeded. 
 
   // * ------- sisi kanan -------------
   const [pelajari, setPelajari] = useState<DipelajariKLS[]>([])
@@ -113,6 +131,11 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
     setInputPelajari(edit.pelajari)
   }
 
+  const pelajariArrString = pelajari.map(item => item.pelajari)
+  useEffect(() => {
+    setDataForm(prev => ({...prev, learning_list: pelajariArrString}))
+  }, [pelajari])
+
 
   // * ---- area instruktur kelas
 
@@ -138,7 +161,7 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
     setPilihanInstruktur(hasilCariInstruktur)
   }, [cariInstruktur])
 
-  const [instruktur, setInstruktur] = useState<number[]>([])
+  const [instruktur, setInstruktur] = useState<number[]>([]) // id instruktuk yang dipilih
   const tambahInstruktur = (event: any, id: number) => {
     event.preventDefault()
     
@@ -172,6 +195,9 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
 
   const instrukturSaya = dataInstrukturKelas.filter(ins => instruktur.includes(ins.id))
 
+  useEffect(() => {
+    setDataForm(prev => ({...prev, instruktur: instruktur}))
+  }, [instruktur])
   
 
     // * ------- sisi kiri -------------
@@ -201,11 +227,14 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
     // * ----- image logic
     
     const [pilihImg, setPilihImg] = useState<any>('')
-    const [postToApi, setPostToAPi] = useState({})
 
-    const handleUploadImg = (e: any) => {
+    
+    
+
+    const handleUploadImg = async(e: any) => {
       const fileImg = e.target.files[0]
-      setPostToAPi(prev => ({ ...prev, file: fileImg }));
+      // setPostToAPi(prev => ({ ...prev, file: fileImg }));
+      setDataForm(prev => ({...prev, image_cover: fileImg}))
       const reader = new FileReader()
   
       reader.onload = () => {
@@ -215,6 +244,30 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
       if (fileImg) {
         reader.readAsDataURL(fileImg)
       }
+
+      // const fileImg = e.currentTarget.files?.[0];
+
+      // if (!fileImg) {
+      //   console.error("No file selected");
+      //   return;
+      // }
+    
+      // // console.log(fileImg); // Cek file yang dipilih
+    
+      // const tesData = new FormData();
+      // tesData.append("image", fileImg, fileImg.name);
+
+      // console.log(tesData.get('image'))
+    
+      // const reader = new FileReader()
+  
+      // reader.onload = () => {
+      //   setPilihImg(reader.result)
+      // }
+  
+      // if (fileImg) {
+      //   reader.readAsDataURL(fileImg)
+      // }
     }
 
   return (

@@ -11,7 +11,7 @@ import { useDialogHandlers } from "@/src/hooks/UseProgressDialog";
 import { useApiErrorHandler } from "@/src/hooks/UseApiErrorHandler";
 
 type PageTambahMateriProps = {
-  params: { bab: string };
+  params: { slug: string, bab: string, };
 };
 
 const TextEditor = dynamic(
@@ -22,7 +22,8 @@ const TextEditor = dynamic(
 const pageTambahMateri = ({ params }: PageTambahMateriProps) => {
   const extractID = (text: any) =>
     parseInt((text.match(/\d+/g) || []).join(""));
-  const id = extractID(params.bab);
+  const bab_id = extractID(params.bab);
+  const course_id = params.slug
   const [error, setError] = useState("");
   const {
     munculDialog,
@@ -47,12 +48,12 @@ const pageTambahMateri = ({ params }: PageTambahMateriProps) => {
       setProgressTimer(0);
       showDialog(<Upload />, "Sedang mengupload data...", true);
 
-      const respon = await APIBuatMateri(dataMateri, id);
+      const respon = await APIBuatMateri(dataMateri, course_id, bab_id);
 
       if (respon) {
         showDialog(
           <Upload />,
-          `Data Materi ${respon.module.module_title} berhasil di simpan`
+          `Data Materi ${respon.data.module_title} berhasil di simpan`
         );
         setTimeout(() => {
           window.location.reload();

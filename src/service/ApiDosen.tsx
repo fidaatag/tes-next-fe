@@ -2,14 +2,14 @@
 
 import axios from "axios";
 
-const specialToken = process.env.TOKENDOS;
+const TOKEN = process.env.TOKEN;
 
 export const APIInstrukturKelas = async () => {
   try {
     const response = await axios.get(
       `http://localhost:8000/api/lecturer/courses/lecturer-list`,
       {
-        headers: { Authorization: `Bearer ${specialToken}` },
+        headers: { Authorization: `Bearer ${TOKEN}` },
       }
     );
 

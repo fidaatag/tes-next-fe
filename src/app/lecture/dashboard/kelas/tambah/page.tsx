@@ -15,7 +15,7 @@ import { useApiErrorHandler } from "@/src/hooks/UseApiErrorHandler";
 
 const TambahPage = () => {
   const [typeButtonForm, setTypeButtonForm] = useState("");
-  const [responForm, setResponForm] = useState();
+  const [responForm, setResponForm] = useState<FormData>();
   const [isAddForm, setIsAddForm] = useState(false);
   const [dataAllBab, setDataAllBab] = useState<Section[]>();
   const router = useRouter();
@@ -37,7 +37,7 @@ const TambahPage = () => {
     showDialog(<Upload />, "Sedang mengupload data...", true);
 
     const respon = await APIBuatKelas(responForm, e);
-
+console.log(respon)
     if (respon?.course?.id) {
       const course_id = respon.course.id;
 
@@ -99,6 +99,8 @@ const TambahPage = () => {
 
     handleTambahKelas();
   }, [isAddForm]);
+
+  console.log(responForm)
 
   return (
     <>

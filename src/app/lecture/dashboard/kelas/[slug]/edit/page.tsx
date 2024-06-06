@@ -5,7 +5,7 @@ import { Button } from "@/src/components/ui/button";
 import FormKelas from "@/src/components/form/FormKelas";
 import { ListKelas } from "@/src/types/index";
 import {
-  APIDetailKelas,
+  APIDetailKelasUPDATE,
   APIEditKelas,
   APIHapusKelas,
 } from "@/src/service/ApiKelas";
@@ -39,7 +39,7 @@ const PageEdit = ({ params }: PageEditKelasProps) => {
 
   // ambil data lama buat nampilin di versi edit
   const dataLamaKelas = async () => {
-    const respon = await APIDetailKelas(id);
+    const respon = await APIDetailKelasUPDATE(id);
     set_DataOldForm(respon);
   };
 

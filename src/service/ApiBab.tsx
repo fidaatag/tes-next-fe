@@ -3,21 +3,18 @@
 import axios from "axios";
 
 const token = process.env.TOKEN;
-
+// {{host}}:{{port}}/api/lecturer/courses/{{courseId}}/sections
 export const APIBuatBab = async (
   formData: any,
-  course_id: any
+  courseId: any
 ): Promise<any> => {
   const dataCreateBab = {
-    course_id: course_id,
     section_title: formData.section_title,
-    created_by: 40,
-    updated_by: 9,
   };
 
   try {
     const response = await axios.post(
-      "http://localhost:8000/api/admin/sections",
+      `http://localhost:8000/api/lecturer/courses/${courseId}/sections`,
       dataCreateBab,
       {
         headers: { Authorization: `Bearer ${token}` },

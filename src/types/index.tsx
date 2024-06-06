@@ -1,3 +1,5 @@
+import { File } from "buffer";
+
 export interface ItemsNav {
   title: string;
   href?: string;
@@ -18,28 +20,29 @@ export interface ItemsNav_WithOptionalChildren extends ItemsNav {
 
 
 export interface ListKelas {
-  message?: string
-  data?: any
-  error?: boolean
-  id: number
-  name: string
-  description: string
-  about: string
-  duration: number
-  effort_taken: number
-  status: string
-  price: number
-  language: string
-  image_cover: string
-  created_at: string
-  updated_at: string
-  created_by: number
-  updated_by: number
-  course_category_id: number
-  deleted_at: Date
-  is_superior: number
-  sections?: Section[]
+  message?: string;
+  data?: any;
+  error?: boolean ;
+  id?: number ;
+  name?: string ;
+  description?: string ;
+  about?: string ;
+  duration?: number ;
+  effort_taken?: number ;
+  status?: string ;
+  price?: number ;
+  language?: string ;
+  image_cover?: any ;
+  created_at?: string ;
+  updated_at?: string ;
+  created_by?: number ;
+  updated_by?: number ;
+  course_category_id?: string ;
+  deleted_at?: Date ;
+  is_superior?: number ;
+  sections?: Section[] ;
 }
+
 
 export interface Section {
   id?: number; 

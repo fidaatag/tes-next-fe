@@ -6,20 +6,16 @@ const token = process.env.TOKEN;
 
 export const APIBuatMateri = async (
   formData: any,
-  sections_id: any
+  courseId: any, 
+  sectionId: any, 
 ): Promise<any> => {
   const dataCreateMateri = {
-    section_id: sections_id,
     module_title: formData?.module_title,
     description: formData?.description || "Anda belum memasukan data",
-    status: "finished",
-    created_by: 23,
-    updated_by: 43,
   };
-
   try {
     const response = await axios.post(
-      "http://localhost:8000/api/modules",
+      `http://localhost:8000/api/lecturer/courses/${courseId}/sections/${sectionId}/modules`,
       dataCreateMateri,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -34,7 +30,9 @@ export const APIBuatMateri = async (
 
 export const APIEditMateri = async (
   formData: any,
-  module_id: any
+  courseId: any, 
+  sectionId: any, 
+  moduleId: any
 ): Promise<any> => {
   const dataUpdateMateri = {
     module_title: formData?.module_title,
@@ -46,7 +44,7 @@ export const APIEditMateri = async (
 
   try {
     const response = await axios.put(
-      `http://localhost:8000/api/modules/${module_id}`,
+      `http://localhost:8000/api/lecturer/courses/${courseId}/sections/${sectionId}/modules/${moduleId}/?_method=PUT`,
       dataUpdateMateri,
       {
         headers: { "Authorization": `Bearer ${token}` }
@@ -59,17 +57,16 @@ export const APIEditMateri = async (
   }
 };
 
-export const APIDetailMateri = async (module_id: any): Promise<any> => {
+export const APIDetailMateri = async (courseId: any, sectionId: any, moduleId: any): Promise<any> => {
   try {
     const response = await axios.get(
-      `http://localhost:8000/api/modules/${module_id}`,
+      `http://localhost:8000/api/lecturer/courses/${courseId}/sections/${sectionId}/modules/${moduleId}`,
       {
         headers: { "Authorization": `Bearer ${token}` }
       }
     );
 
-    //
-    return response.data.module;
+    return response.data;
   } catch (error) {
     throw error;
   }
