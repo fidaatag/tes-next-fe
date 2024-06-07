@@ -37,9 +37,9 @@ const TambahPage = () => {
     setProgressTimer(0);
     showDialog(<Upload />, "Sedang mengupload data...", true);
 
-    const okData = UseConvertFormDta(responForm, e)
+    const okData = UseConvertFormDta(responForm)
 
-    const respon = await APIBuatKelas_caseCreateDraf(responForm);
+    const respon = await APIBuatKelas_caseCreateDraf(responForm, okData);
     console.log(respon)
 
     if (respon?.course?.id) {
