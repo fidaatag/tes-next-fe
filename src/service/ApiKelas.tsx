@@ -1,19 +1,42 @@
-"use"; // kalo diganti client --- jadi FormData().append tidak berfungsi
+ // kalo diganti client --- FormData().append berfungsi, tapi tidak bisa log FormData
+ // kalo diganti server --- FormData().append berfungsi juga, log FormData bisa kebaca
+ // kalo pake use server ==> cookies token kebaca, tapi file img ga kebaca
+ // kalo pake use client ==> cookies tokn ga kebaca, tapi file img kebaca
+ // kalo ga pake apa ==> kebaca semua
+
+ // solusinya : menerima paramter yang sudah dibuild menjadi FormData siap upload 
+
+ "use server" 
 
 import axios from "axios";
-import { writeFile } from "fs/promises";
-import { join } from "path";
+import { GetAuth } from "../helpers/AuthUser";
+import AuthAttributes from "../types/AuthUserInterface";
+import Http from "../helpers/Fetch";
 
-const token = process.env.TOKEN;
 
+ // http://localhost:8000/api/lecturer/courses/  --> create buat api di page tambah, buttonnya draf ---- by default status draft
+ // http://localhost:8000/api/lecturer/courses/publish --> create buat api di page tambah, buttonnya ajukan ke admin / publish --- key status ttp diisi --- by default status draft juga 😢 
+ // http://localhost:8000/api/lecturer/courses/123/publish --> api khusus untuk page edit, button publis/ ajukan ke admin
+ // http://localhost:8000/api/lecturer/courses/8243 ---> edit yg versi lengkap 
+ // http://localhost:8000/api/lecturer/courses/4/change --> edit statusnya aja, json status aja
 
-export const APIBuatKelas = async (
+ const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNzE3Njc2NDk0LCJleHAiOjE3MTgyODEyOTQsIm5iZiI6MTcxNzY3NjQ5NCwianRpIjoibmVqM1RRNFJYWTU4QXVZayIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwidXNlciI6eyJpZCI6MywiZnVsbF9uYW1lIjoibGVjdHVyZXIxIiwidXNlcm5hbWUiOiJsZWN0dXJlcjEiLCJlbWFpbCI6ImxlY3R1ckBvcGVuY291cnNlLmNvbSIsInBob25lX251bWJlciI6IjA4MTIzNDU2Nzg5IiwiYmlvIjoibGVjdHVyZSIsInByb2ZpbGVfcGljdHVyZSI6IiIsImVtYWlsX3ZlcmlmaWVkX2F0IjpudWxsLCJjcmVhdGVkX2F0IjoiMjAyNC0wNi0wNlQwNzoxNzo0Ni4wMDAwMDBaIiwidXBkYXRlZF9hdCI6IjIwMjQtMDYtMDZUMDc6MTc6NDYuMDAwMDAwWiIsImNyZWF0ZWRfYnkiOm51bGwsInVwZGF0ZWRfYnkiOm51bGwsInJvbGUiOiJsZWN0dXJlIiwiTklETiI6bnVsbCwiamFiYXRhbiI6bnVsbCwiZGVsZXRlZF9hdCI6bnVsbH19.w5dkfHXheNu5V6IwK6Zg9Jc-Z1SUTinNuuSZNL1YanE"
+
+ const TOKEN = process.env.TOKEN;
+
+ console.log("disini ada "+TOKEN)
+ 
+
+export const APIBuatKelas_caseCreateDraf = async (
   formData: any,
-  status: string
+  status?: string
 ): Promise<any> => {
+
+
 
   const dataCreateKelas = new FormData();
 
+  console.log("tes")
   console.log(formData) // sampe sini bisa masuk, mau pake use server / use client ttp bisa
 
   for (const key in formData) {
@@ -35,37 +58,30 @@ export const APIBuatKelas = async (
   console.log(dataCreateKelas)
 
   try {
-    const response = await axios.post(
-      "http://localhost:8000/api/admin/courses",
+    const user : AuthAttributes | null = await GetAuth();
+// const cook = cookies()
+    const cookieFromToken = user?.token
+// console.log(user)
+// console.log(cookieFromToken)
+console.log("disini")
+    const response = await Http.post(
+      `/api/lecturer/courses`, // aman bisa
+      // `/api/lecturer/courses/publish`, // aman bisa
       dataCreateKelas,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
+          Authorization: `Bearer ${cookieFromToken}`,
+          'Content-Type': 'multipart/form-data'   // -- axios udh pinter bisa detect ini
       },
       }
     );
-    console.log(response)
+    console.log("sini")
+console.log(response)
     return response.data;
   } catch (error) {
-    return { error: true, message: "API Tidak Aktif" };
+    console.log(error)
+    return { error: true, message: "API Tidak Aktif: "+error };
   }
-
-  // const blob = new Blob([formData?.image_cover])
-  // console.log(blob)
-  // dataCreateKelas.append("image", blob)
-
-  // const bytes = await formData?.image_cover.arrayBuffer();
-  // const buffer = Buffer.from(bytes);
-
-  // const path = join(process.cwd(), formData?.image_cover.name);
-  // await writeFile(path, buffer);
-
-  // console.log(`open ${path} to see the uploaded file`);
-
-
-
-  console.log(dataCreateKelas.get('image_cover')) // disini ga mau masuk, mesti pake use server. --> serve tdk terima File
 };
 
 export const APIEditKelas = async (
@@ -151,15 +167,19 @@ export const APIHapusKelas = async (id: any) => {
 
 export const APISemuaKelas = async () => {
   try {
-    const response = await axios.get(
-      `http://localhost:8000/api/lecturer/courses`,
+    const user : AuthAttributes | null = await GetAuth();
+
+    const cookieFromToken = user?.token;
+
+    const response = await Http.get(
+      `api/lecturer/courses/status/check?status=semua`,
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${cookieFromToken}` },
       }
     );
 
     return response.data;
   } catch (error) {
-    return { error: true, message: "API Tidak Aktif" };
+    return { error: true, message: "API Tidak Aktif: "+error };
   }
 };

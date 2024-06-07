@@ -3,19 +3,20 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/src/components/ui/button";
 import FormKelas from "@/src/components/form/FormKelas";
-import { APIBuatKelas } from "@/src/service/ApiKelas";
+import {  APIBuatKelas_caseCreateDraf } from "@/src/service/ApiKelas";
 import { FileCheck, Link2Off, Upload } from "lucide-react";
 import { setTimeout } from "timers";
 import { useRouter } from "next/navigation";
 import CustomAlertDialog from "@/src/components/CustomAlertDialog";
 import { useDialogHandlers } from "@/src/hooks/UseProgressDialog";
 import { useBabUploader } from "@/src/hooks/UseBabUploader";
-import { Section } from "@/src/types/index";
+import { ListKelas, Section } from "@/src/types/index";
 import { useApiErrorHandler } from "@/src/hooks/UseApiErrorHandler";
+import { UseConvertFormDta } from "@/src/hooks/UseConvertFormData";
 
 const TambahPage = () => {
   const [typeButtonForm, setTypeButtonForm] = useState("");
-  const [responForm, setResponForm] = useState<FormData>();
+  const [responForm, setResponForm] = useState<ListKelas>();
   const [isAddForm, setIsAddForm] = useState(false);
   const [dataAllBab, setDataAllBab] = useState<Section[]>();
   const router = useRouter();
@@ -36,8 +37,11 @@ const TambahPage = () => {
     setProgressTimer(0);
     showDialog(<Upload />, "Sedang mengupload data...", true);
 
-    const respon = await APIBuatKelas(responForm, e);
-console.log(respon)
+    const okData = UseConvertFormDta(responForm, e)
+
+    const respon = await APIBuatKelas_caseCreateDraf(responForm);
+    console.log(respon)
+
     if (respon?.course?.id) {
       const course_id = respon.course.id;
 
@@ -75,7 +79,7 @@ console.log(respon)
   useEffect(() => {
     const handleTambahKelas = async () => {
       if (isAddForm) {
-        const respon = await APIBuatKelas(responForm, "drafted");
+        const respon = await APIBuatKelas_caseCreateDraf(responForm, "drafted");
 
         if (respon?.course?.id) {
           const course_id = respon.course.id;

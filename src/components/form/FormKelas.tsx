@@ -202,8 +202,8 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
 
     // * ------- sisi kiri -------------
     const [cariKategori, setCariKategori] = useState("");
-    const [hasilCariKategori, setHasilCariKategori] = useState<KategoriKLS[]>();
-    const [dataKategoriKelas, setdataKategoriKelas] = useState<KategoriKLS[]>();
+    const [hasilCariKategori, setHasilCariKategori] = useState<KategoriKLS[]>();  // data yg akan muncul pas dicari
+    const [dataKategoriKelas, setdataKategoriKelas] = useState<KategoriKLS[]>(); // data yg akan muncul meski ga dicari
 
     const getDataKategori = async () => {
       const respon = await APISemuaKategori()
