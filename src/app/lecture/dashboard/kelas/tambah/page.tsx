@@ -37,9 +37,9 @@ const TambahPage = () => {
     setProgressTimer(0);
     showDialog(<Upload />, "Sedang mengupload data...", true);
 
-    const okData = UseConvertFormDta(responForm)
+    const okData = UseConvertFormDta(responForm, e)
 
-    const respon = await APIBuatKelas_caseCreateDraf(responForm, okData);
+    const respon = await APIBuatKelas_caseCreateDraf(okData);
     console.log(respon)
 
     if (respon?.course?.id) {
@@ -121,17 +121,17 @@ const TambahPage = () => {
           <div className="flex gap-2">
             <Button
               form={typeButtonForm}
-              onClick={(event) => handleBtnSubmit("drafted", event)}
+              onClick={(event) => handleBtnSubmit("draft", event)}
               variant="outline"
             >
               Simpan Draf
             </Button>
             <Button
               form={typeButtonForm}
-              onClick={(event) => handleBtnSubmit("published", event)}
+              onClick={(event) => handleBtnSubmit("published-admin", event)}
               variant="secondary"
             >
-              Publikasikan
+              Ajukan Ke Admin
             </Button>
           </div>
         </div>

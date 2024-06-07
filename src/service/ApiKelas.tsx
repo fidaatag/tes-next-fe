@@ -22,11 +22,13 @@ import { UseConvertFormDta } from "../hooks/UseConvertFormData";
 // * semua api course/ atau  yang ada create/publish --> untuk section prilakunya add ke db, kalo mau edit lupakan --- blm ada fitur itu 😅
 // * khusus case create apapun kondisinya, wajib key : nama, description, image-cover
 
+// ! enum status hanya menrima ini : $table->enum('status',['published-admin','published-lecturer','draft','revision'])->nullable();
+
 
 
 export const APIBuatKelas_caseCreateDraf = async (
-  formData: any, // yg blum di build
-  tes: any, // yg udh di build
+  formData: any, // yg blum di build - skrng versi build
+  // tes: any, // yg udh di build
   status?: string
 ): Promise<any> => {
   const dataCreateKelas = new FormData();
@@ -48,9 +50,9 @@ export const APIBuatKelas_caseCreateDraf = async (
 
   // tes apakah yg sudah di build itu sama dengan yg belum di build ?
   console.log(dataCreateKelas) // build disini
-  console.log(tes) // build diluar
+  // console.log(tes) // build diluar
 
-  console.log("apakah sama? "+ dataCreateKelas === tes)
+  // console.log("apakah sama? "+ dataCreateKelas === tes)
 
   try {
     const user : AuthAttributes | null = await GetAuth();
@@ -63,7 +65,7 @@ console.log("disini")
       `/api/lecturer/courses`, // aman bisa
       // `/api/lecturer/courses/publish`, // aman bisa
       // dataCreateKelas, // build formData disini //---- data bisa kesimpen -- krn ga ada key status // bisa berhasil klo ga ada status
-      tes, // build formData di luar // --- data tidak bisa kesimpen -- krn ada key status // bisa berhasil kalo ga ada status
+      formData, // build formData di luar // --- data tidak bisa kesimpen -- krn ada key status // bisa berhasil kalo ga ada status -- masalahnya krn enum statusya beda
       {
         headers: {
           Authorization: `Bearer ${cookieFromToken}`,

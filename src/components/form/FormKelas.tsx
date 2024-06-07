@@ -276,7 +276,7 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
         <Form {...form}>
           <form
             className="grid grid-cols-4 justify-between gap-10"
-            id={ typeBtn === "drafted" ? "drafted" : typeBtn === "published" ? "published" : "hapus" }
+            id={ typeBtn }
           >
             {/* // ! --- sisi kanan ----  */}
             <div className="col-span-3 flex flex-col gap-4">
