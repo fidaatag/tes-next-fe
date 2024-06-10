@@ -73,22 +73,17 @@ const TambahPage = () => {
   useEffect(() => {
     const handleTambahKelas = async () => {
       if (isAddForm) {
-        const respon = await APIBuatKelas_caseCreateDraft(responForm, "draft");
+        const okData = UseConvertFormDta(responForm, "draft", dataAllBab)
+        const respon = await APIBuatKelas_caseCreateDraft(okData);
 
-        if (respon?.course?.id) {
-          const course_id = respon.course.id;
-
-          const isSuccesAll = await uploadBab(dataAllBab, course_id);
-
-          if (isSuccesAll || respon.course.id) {
-            showDialog(
-              <FileCheck />,
-              `Jika anda ingin menambah materi bab, anda akan diarahkan ke halaman edit data kelas ${respon.course.name} Anda tersimpan. Silahkan pilih bab yang akan ditambah materi`
-            );
-            setTimeout(() => {
-              router.push(`/lecture/dashboard/kelas/${course_id}/edit`);
-            }, 4000);
-          }
+        if (respon?.success) {
+          showDialog(
+            <FileCheck />,
+            `Jika anda ingin menambah materi bab, anda akan diarahkan ke halaman edit data kelas ${responForm?.name} Anda tersimpan. Silahkan pilih bab yang akan ditambah materi`
+          );
+          setTimeout(() => {
+            router.push(`/lecture/dashboard/kelas/${respon?.data}/edit`);
+          }, 4000);
         }
 
         handleApiError(respon);
