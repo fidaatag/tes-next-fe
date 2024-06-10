@@ -1,4 +1,4 @@
-export const UseConvertFormDta = (req: any, status?: string) => {
+export const UseConvertFormDta = (req: any, status?: string, req_bab?: any) => {
 
   const menjadiFormData = new FormData()
 
@@ -19,6 +19,14 @@ export const UseConvertFormDta = (req: any, status?: string) => {
   }
   
   if ( status !== undefined ) menjadiFormData.append("status", status)
+
+  if (req_bab && Array.isArray(req_bab)) {
+    req_bab.forEach((item) => {
+      if (item.hasOwnProperty('section_title')) {
+        menjadiFormData.append(`sections[]`, item.section_title)
+      }
+    })
+  }
 
   return menjadiFormData
 

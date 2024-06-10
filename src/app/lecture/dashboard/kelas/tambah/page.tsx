@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/src/components/ui/button";
 import FormKelas from "@/src/components/form/FormKelas";
-import {  APIBuatKelas_caseCreateDraf } from "@/src/service/ApiKelas";
+import { APIBuatKelas_caseCreateDraft } from "@/src/service/ApiKelas";
 import { FileCheck, Link2Off, Upload } from "lucide-react";
 import { setTimeout } from "timers";
 import { useRouter } from "next/navigation";
@@ -37,24 +37,19 @@ const TambahPage = () => {
     setProgressTimer(0);
     showDialog(<Upload />, "Sedang mengupload data...", true);
 
-    const okData = UseConvertFormDta(responForm, e)
+    const okData = UseConvertFormDta(responForm, e, dataAllBab)
 
-    const respon = await APIBuatKelas_caseCreateDraf(okData);
+    const respon = await APIBuatKelas_caseCreateDraft(okData);
 
-    if (respon?.course?.id) {
-      const course_id = respon.course.id;
-
-      const isSuccesAll = await uploadBab(dataAllBab, course_id);
-
-      if (isSuccesAll || respon.course.id) {
-        showDialog(
-          <FileCheck />,
-          `Data kelas ${respon.course.name} berhasil diupload.`
-        );
-        setTimeout(() => {
-          router.push("/lecture/dashboard/kelas");
-        }, 4000);
-      }
+    if (respon?.success) {
+      showDialog(
+        <FileCheck />,
+        `Data kelas ${responForm?.name} berhasil diupload.`
+      ); 
+      
+      setTimeout(() => {
+        router.push("/lecture/dashboard/kelas");
+      }, 3000);
     }
     
     if (
@@ -78,7 +73,7 @@ const TambahPage = () => {
   useEffect(() => {
     const handleTambahKelas = async () => {
       if (isAddForm) {
-        const respon = await APIBuatKelas_caseCreateDraf(responForm, "drafted");
+        const respon = await APIBuatKelas_caseCreateDraft(responForm, "draft");
 
         if (respon?.course?.id) {
           const course_id = respon.course.id;
