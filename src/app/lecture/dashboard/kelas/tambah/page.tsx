@@ -40,7 +40,6 @@ const TambahPage = () => {
     const okData = UseConvertFormDta(responForm, e)
 
     const respon = await APIBuatKelas_caseCreateDraf(okData);
-    console.log(respon)
 
     if (respon?.course?.id) {
       const course_id = respon.course.id;
