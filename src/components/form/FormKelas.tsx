@@ -254,7 +254,7 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
         reader.readAsDataURL(fileImg)
       }
     }
-
+console.log(oldData)
   return (
     <>
       <div>
@@ -293,7 +293,7 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
                         placeholder="Tulis Tentang Kelas Ini"
                         {...field}
                         className="h-48"
-                        defaultValue={oldData ? oldData.about : ""}
+                        defaultValue={oldData ? oldData.description : ""}
                       />
                     </FormControl>
                     <FormMessage />
