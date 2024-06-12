@@ -7,6 +7,7 @@ import { ListKelas } from "@/src/types/index";
 import {
   APIDetailKelas,
   APIEditKelas,
+  APIEditKelas_caseFullEdit,
   APIHapusKelas,
 } from "@/src/service/ApiKelas";
 import { FileCheck, Link2Off, Upload } from "lucide-react";
@@ -15,6 +16,7 @@ import { useDialogHandlers } from "@/src/hooks/UseProgressDialog";
 import CustomAlertDialog from "@/src/components/CustomAlertDialog";
 import { useBabUploader } from "@/src/hooks/UseBabUploader";
 import { useApiErrorHandler } from "@/src/hooks/UseApiErrorHandler";
+import { UseConvertFormDta } from "@/src/hooks/UseConvertFormData";
 
 type PageEditKelasProps = {
   params: { slug: string };
@@ -76,19 +78,17 @@ const PageEdit = ({ params }: PageEditKelasProps) => {
     setTypeButtonForm(e);
     setProgressTimer(0);
 
-    if (e === "drafted" || e === "published") {
+    if (e === "draft" || e === "published-lecturer") {
       showDialog(<Upload />, "Sedang mengupload data...", true);
 
-      const respon = await APIEditKelas(responForm, e, id);
+      const okData = UseConvertFormDta(responForm, e, dataAllBab)
 
-      const course_id = data_OldForm?.data?.id;
+      const respon = await APIEditKelas_caseFullEdit(okData, id);
 
-      const isSuccesAll = await uploadBab(dataAllBab, course_id);
-
-      if (isSuccesAll || respon) {
+      if (respon?.success) {
         showDialog(
           <FileCheck />,
-          `Data kelas berhasil ${e === "drafted" ? "update" : "publish"}.`
+          `Data kelas berhasil ${e === "draft" ? "update" : "di ajukan ke admin"}.`
         );
         setTimeout(() => {
           window.location.reload();
@@ -129,17 +129,17 @@ const PageEdit = ({ params }: PageEditKelasProps) => {
             </Button>
             <Button
               form={typeButtonForm}
-              onClick={(event) => handleBtnSubmit("drafted", event)}
+              onClick={(event) => handleBtnSubmit("draft", event)}
               variant="outline"
             >
               Simpan Draf
             </Button>
             <Button
               form={typeButtonForm}
-              onClick={(event) => handleBtnSubmit("published", event)}
+              onClick={(event) => handleBtnSubmit("published-lecturer", event)}
               variant="secondary"
             >
-              Publikasikan
+              Ajukan ke Admin
             </Button>
           </div>
         </div>

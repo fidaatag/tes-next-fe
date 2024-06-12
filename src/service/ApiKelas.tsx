@@ -71,7 +71,7 @@ export const APIEditKelas_caseFullEdit = async (
   try {
     const user: AuthAttributes | null = await GetAuth();
     const cookieFromToken = user?.token;
-    const response = await Http.post(`/api/lecturer/courses/${id}`, formData, {
+    const response = await Http.post(`/api/lecturer/courses/${id}?_method=PUT`, formData, {
       headers: {
         Authorization: `Bearer ${cookieFromToken}`,
         "Content-Type": "multipart/form-data", // -- axios udh pinter bisa detect ini
