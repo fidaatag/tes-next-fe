@@ -83,6 +83,25 @@ export const APIEditKelas_caseFullEdit = async (
   }
 };
 
+export const APIEditKelas_Status = async (
+  formData: any,
+  id: string
+): Promise<any> => {
+  try {
+    const user: AuthAttributes | null = await GetAuth();
+    const cookieFromToken = user?.token;
+    const response = await Http.post(`/api/lecturer/courses/${id}/change?_method=PUT`, formData, {
+      headers: {
+        Authorization: `Bearer ${cookieFromToken}`,
+        "Content-Type": "multipart/form-data", // -- axios udh pinter bisa detect ini
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return { error: true, message: "API Tidak Aktif: " + error };
+  }
+};
+
 export const APIEditKelas_caseFullEdit_Publish = async (
   formData: any,
   id: string

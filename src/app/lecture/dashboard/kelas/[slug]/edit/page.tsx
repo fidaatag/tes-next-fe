@@ -6,6 +6,7 @@ import FormKelas from "@/src/components/form/FormKelas";
 import { ListKelas } from "@/src/types/index";
 import {
   APIDetailKelas,
+  APIEditKelas_Status,
   APIEditKelas_caseFullEdit,
   APIHapusKelas,
 } from "@/src/service/ApiKelas";
@@ -16,6 +17,7 @@ import CustomAlertDialog from "@/src/components/CustomAlertDialog";
 import { useBabUploader } from "@/src/hooks/UseBabUploader";
 import { useApiErrorHandler } from "@/src/hooks/UseApiErrorHandler";
 import { UseConvertFormDta } from "@/src/hooks/UseConvertFormData";
+import { object } from "zod";
 
 type PageEditKelasProps = {
   params: { slug: string };
@@ -25,7 +27,7 @@ const PageEdit = ({ params }: PageEditKelasProps) => {
   const id = params.slug;
   const [typeButtonForm, setTypeButtonForm] = useState("");
   const [data_OldForm, set_DataOldForm] = useState<ListKelas>();
-  const [responForm, setResponForm] = useState();
+  const [responForm, setResponForm] = useState<{}>();
   const [dataAllBab, setDataAllBab] = useState([]); // ambil data bab yang tersedia selama pengisian form
   const router = useRouter();
   const {
@@ -77,12 +79,17 @@ const PageEdit = ({ params }: PageEditKelasProps) => {
     setTypeButtonForm(e);
     setProgressTimer(0);
 
-    if (e === "draft" || e === "published-lecturer") {
+    if (e === "draft" || e === "ajukan_publish") {
       showDialog(<Upload />, "Sedang mengupload data...", true);
 
       const okData = UseConvertFormDta(responForm, e, dataAllBab)
 
-      const respon = await APIEditKelas_caseFullEdit(okData, id);
+      let respon : any;
+      if (Array.from(okData.entries()).length === 1 && okData.has("status")) {
+        respon = await APIEditKelas_Status(okData, id)
+      } else {
+        respon = await APIEditKelas_caseFullEdit(okData, id);
+      }
 
       if (respon?.success) {
         showDialog(
@@ -135,7 +142,7 @@ const PageEdit = ({ params }: PageEditKelasProps) => {
             </Button>
             <Button
               form={typeButtonForm}
-              onClick={(event) => handleBtnSubmit("published-lecturer", event)}
+              onClick={(event) => handleBtnSubmit("ajukan_publish", event)}
               variant="secondary"
             >
               Ajukan ke Admin
