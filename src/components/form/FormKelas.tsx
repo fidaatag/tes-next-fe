@@ -88,6 +88,15 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
     }
   }, [valueForm]); // !? ini kalo diisi valueFill Error : Maximum update depth exceeded. 
 
+  // update data lama lecture dan learning list
+  useEffect(() => {
+    if(oldData !== undefined) {
+      setPelajari(oldData?.learning_lists ?? [])
+      // setDataInstrukturKelas(oldData?.lecturers ?? [])
+      setInstruktur(oldData?.lecturers?.map(item => item?.id) ?? [])
+    }
+  }, [oldData])
+
   // * ------- sisi kanan -------------
   const [pelajari, setPelajari] = useState<DipelajariKLS[]>([])
   const [inputPelajari, setInputPelajari] = useState("")
@@ -105,17 +114,17 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
       setEditPelajariId(null)
       setInputPelajari(" ")
       const editedPelajari = pelajari.find(item => item.id === editPelajariId);
-      toast.warning(`${editedPelajari?.pelajari} sudah diedit`);
+      toast.warning(`${editedPelajari?.name} sudah diedit`);
 
     } else {
       const newPelajari: DipelajariKLS = {
         id: pelajari.length + 1,
-        pelajari: inputPelajari,
+        name: inputPelajari,
       };
   
       setPelajari((prevPelajari) => [...prevPelajari, newPelajari]);
       setInputPelajari(" ")
-      toast.success(`${newPelajari.pelajari} ditambahkan`)
+      toast.success(`${newPelajari.name} ditambahkan`)
     }
   };
 
@@ -131,7 +140,7 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
     setInputPelajari(edit.pelajari)
   }
 
-  const pelajariArrString = pelajari.map(item => item.pelajari)
+  const pelajariArrString = pelajari.map(item => item.name)
   useEffect(() => {
     setDataForm(prev => ({...prev, learning_list: pelajariArrString}))
   }, [pelajari])
@@ -244,30 +253,6 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
       if (fileImg) {
         reader.readAsDataURL(fileImg)
       }
-
-      // const fileImg = e.currentTarget.files?.[0];
-
-      // if (!fileImg) {
-      //   console.error("No file selected");
-      //   return;
-      // }
-    
-      // // console.log(fileImg); // Cek file yang dipilih
-    
-      // const tesData = new FormData();
-      // tesData.append("image", fileImg, fileImg.name);
-
-      // console.log(tesData.get('image'))
-    
-      // const reader = new FileReader()
-  
-      // reader.onload = () => {
-      //   setPilihImg(reader.result)
-      // }
-  
-      // if (fileImg) {
-      //   reader.readAsDataURL(fileImg)
-      // }
     }
 
   return (
@@ -325,7 +310,7 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
                   pelajari.map((pel) => ( 
                     <div className="flex gap-2 items-start w-3/4 space-y-2 hover:border-b">
                       <p className="mt-2">◾</p>
-                      <p className="flex-1">{pel.pelajari}</p>
+                      <p className="flex-1">{pel.name}</p>
                       <div className="flex gap-2 ml-10">
                         <button 
                           onClick={() => hapusPelajari(pel)}
@@ -627,7 +612,7 @@ const FormKelas = ({typeBtn, AllValue, oldData, respon, dataBab, addForm} : Form
                 <div className="flex flex-col gap-5 p-2">
                   <div className="h-48 w-full rounded-lg bg-slate-100 flex justify-center items-center border">
                     {pilihImg? (
-                      <img className="rounded-lg w-full h-full object-cover" src={pilihImg} alt="" />
+                      <img className="rounded-lg w-full h-full object-cover" src={pilihImg || oldData?.image_cover} alt="" />
                     ) : (
                       <Image className="text-slate-300 h-10 w-10" />
                     )}          

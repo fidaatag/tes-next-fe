@@ -40,6 +40,8 @@ export interface ListKelas {
   course_category_id?: string ;
   deleted_at?: Date ;
   is_superior?: number ;
+  learning_lists?: [];
+  lecturers?: InstrukturKLS[];
   sections?: Section[] ;
 }
 
@@ -95,8 +97,8 @@ export interface BabKLS {
 }
 
 export interface DipelajariKLS {
-  id: number;
-  pelajari: string;
+  id?: number;
+  name?: string;
 }
 
 export interface InstrukturKLS {
