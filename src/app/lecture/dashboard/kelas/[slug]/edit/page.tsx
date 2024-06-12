@@ -6,7 +6,6 @@ import FormKelas from "@/src/components/form/FormKelas";
 import { ListKelas } from "@/src/types/index";
 import {
   APIDetailKelas,
-  APIEditKelas,
   APIEditKelas_caseFullEdit,
   APIHapusKelas,
 } from "@/src/service/ApiKelas";
@@ -98,10 +97,10 @@ const PageEdit = ({ params }: PageEditKelasProps) => {
       handleApiError(respon);
     } else if (e === "hapus") {
       const respon = await APIHapusKelas(id);
-      if (respon?.succes) {
+      if (respon?.message) {
         showDialog(<Link2Off />, `Data kelas terhapus`);
         setTimeout(() => {
-          router.push("/dashboard/kelas");
+          router.push("/lecture/dashboard/kelas");
         }, 4000);
       }
       handleApiError(respon);
